@@ -32,7 +32,7 @@ final class Model {
     init(inMemory: Bool = false) {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: inMemory)
         // It should crash if it can't create a container.
-        let container = try! ModelContainer(for: StudyTask.self, configurations: configuration)
+        let container = try! ModelContainer(for: StudySession.self, configurations: configuration)
         
         self.container = container
         self.modelContext = container.mainContext
@@ -40,12 +40,12 @@ final class Model {
     
     func generateSampleData() throws {
         for i in 0..<3 {
-            let goal = StudyTask(
+            let goal = StudySession(
                 title: "Test Goal \(i)",
                 endDate: Calendar.current.date(byAdding: .day, value: 10 + i, to: .now) ?? .now
             )
             
-            let steps = (0..<5).map { StudyTask.Step(name: "Step \($0)", details: "Read chapter \($0+1)") }
+            let steps = (0..<5).map { StudySession.Step(name: "Step \($0)", details: "Read chapter \($0+1)") }
             goal.steps = steps
             
             modelContext.insert(goal)

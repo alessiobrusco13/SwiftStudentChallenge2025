@@ -1,5 +1,5 @@
 //
-//  StudyTask.swift
+//  StudySession.swift
 //  SwiftStudentChallenge2025
 //
 //  Created by Alessio Garzia Marotta Brusco on 07/02/25.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class StudyTask: Identifiable {
+final class StudySession: Identifiable {
     @Attribute(.unique) var id: UUID
     
     var title: String
@@ -32,5 +32,5 @@ final class StudyTask: Identifiable {
         self.completed = completed
     }
     
-    @MainActor static let example =  StudyTask(title: "Newtonian mechanics exam", endDate: .now.addingTimeInterval(2*24*60*60))
+    @MainActor static let example =  StudySession(title: "Newtonian mechanics exam", endDate: .now.addingTimeInterval(2*24*60*60))
 }

@@ -36,7 +36,6 @@ struct HomeView: View {
                 topBarMinimized = false
             }
         }
-        
     }
     
     var topBar: some View {
