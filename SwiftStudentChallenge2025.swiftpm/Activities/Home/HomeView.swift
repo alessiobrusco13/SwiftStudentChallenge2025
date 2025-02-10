@@ -9,8 +9,41 @@ import SwiftUI
 
 
 struct HomeView: View {
+    @State private var topBarMinimized = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView {
+            ForEach(0..<20, id: \.self) { i in
+                Text("\(i)")
+                    .padding(20)
+                    .background(.red)
+            }
+        }
+        .safeAreaInset(edge: .top) {
+            topBar
+        }
+        .onScrollGeometryChange(for: Double.self) { geometry in
+            geometry.contentOffset.y + geometry.contentInsets.top
+        } action: { oldValue, newValue in
+            print(newValue)
+            
+            if newValue >= 20 {
+                topBarMinimized = true
+            } else if newValue <= 10 {
+                topBarMinimized = false
+            }
+        }
+        
+    }
+    
+    var topBar: some View {
+        TopBar(minimized: $topBarMinimized) {
+            Button {
+                
+            } label: {
+                
+            }
+        }
     }
 }
 

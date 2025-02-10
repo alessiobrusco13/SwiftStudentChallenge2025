@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class StudyTask: Identifiable {
+final class StudyTask: Identifiable {
     @Attribute(.unique) var id: UUID
     
     var title: String
@@ -18,7 +18,7 @@ class StudyTask: Identifiable {
     var steps: [Step]
     
     var startDate: Date
-    #warning("It's important the user doesn't change the end date lightly. Be sure to prompt the user about it.")
+#warning("It's important the user doesn't change the end date lightly. Be sure to prompt the user about it.")
     var endDate: Date
     
     init(title: String, details: String = "", startDate: Date = .now, endDate: Date, completed: Bool = false) {
@@ -31,4 +31,6 @@ class StudyTask: Identifiable {
         self.endDate = endDate
         self.completed = completed
     }
+    
+    @MainActor static let example =  StudyTask(title: "Newtonian mechanics exam", endDate: .now.addingTimeInterval(2*24*60*60))
 }

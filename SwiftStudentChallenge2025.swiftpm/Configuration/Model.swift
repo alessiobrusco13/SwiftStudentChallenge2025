@@ -14,6 +14,9 @@ final class Model {
     let container: ModelContainer
     private let modelContext: ModelContext
     
+    var shouldShowWelcomeScreen = true
+
+    static let hasOnboardedKey = "hasOnboarded"
     static let preview = {
         let model = Model(inMemory: true)
         
