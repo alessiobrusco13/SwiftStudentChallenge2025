@@ -75,5 +75,4 @@ struct Previewer<Content: View>: View {
     } contextHandler: { context in
         context.insert(StudyTask.example)
     }
-
 }
