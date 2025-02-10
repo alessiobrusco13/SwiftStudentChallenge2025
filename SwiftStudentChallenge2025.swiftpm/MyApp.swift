@@ -4,8 +4,7 @@ import SwiftUI
 struct MyApp: App {
     @State private var model = Model()
     @Environment(\.scenePhase) var scenePhase
-    
-    
+     
     var body: some Scene {
         WindowGroup {
             ContentView()

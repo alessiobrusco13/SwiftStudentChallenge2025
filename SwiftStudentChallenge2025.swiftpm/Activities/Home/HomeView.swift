@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// [] Scroll lag when showing welcome message.
 
 struct HomeView: View {
     @State private var topBarMinimized = false
@@ -18,7 +19,9 @@ struct HomeView: View {
                     .padding(20)
                     .background(.red)
             }
+            .compositingGroup()
         }
+        .frame(maxWidth: .infinity)
         .safeAreaInset(edge: .top) {
             topBar
         }
@@ -49,4 +52,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environment(Model.preview)
 }

@@ -79,27 +79,28 @@ struct TopBar<Content: View>: View {
 #Preview {
     @Previewable @State var minimized = false
     
-    VStack {
-        TopBar(minimized: $minimized) {
-            
-        }
-        
-        Spacer()
-        
-        HStack {
-//            Button("Trigger Welcome") {
-//                Task { @MainActor in
-//                    showingWelcome = true
-//                    try? await Task.sleep(for: .seconds(2))
-//                    showingWelcome = false
-//                }
-//            }
-            
-            Button("Toggle Minimization") {
-                minimized.toggle()
+    ZStack {
+        VStack {
+            TopBar(minimized: $minimized) {
+                Button {
+                    
+                } label: {
+                    Image(systemName: "gear")
+                        .font(.title3)
+                }
+                .buttonBorderShape(.circle)
+                .buttonStyle(.glass)
             }
+            
+            Spacer()
+            
+            HStack {
+                Button("Toggle Minimization") {
+                    minimized.toggle()
+                }
+            }
+            .buttonStyle(.borderedProminent)
         }
-        .buttonStyle(.borderedProminent)
     }
     .environment(Model.preview)
 }

@@ -7,10 +7,12 @@
 
 import SwiftUI
 
+// Maybe remove the shadows.
+
 struct GlassButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .padding(10)
+            .padding(8)
             .background(.ultraThinMaterial, in: .buttonBorder)
             .opacity(configuration.isPressed ? 0.7 : 1)
             .scaleEffect(configuration.isPressed ? 0.95 : 1)
@@ -40,7 +42,7 @@ extension ButtonStyle where Self == GlassButtonStyle {
             } label: {
                 Image(systemName: "gear")
                     .font(.title3)
-                    
+                
             }
             .buttonBorderShape(.circle)
         }

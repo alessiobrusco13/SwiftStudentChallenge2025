@@ -10,19 +10,23 @@ import SwiftUI
 struct GlassProminentButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .padding(10)
+            .padding(8)
             .background(
                 .thinMaterial
                     .shadow(
                         .inner(
-                            color: .white.opacity(0.6),
-                            radius: 1
+                            color: .black.opacity(0.1),
+                            radius: 1,
+                            x: -0.25,
+                            y: -0.25
                         )
                     )
                     .shadow(
                         .drop(
                             color: .white.opacity(0.6),
-                            radius: 1
+                            radius: 1,
+                            x: 0.5,
+                            y: 0.5
                         )
                     )
                 ,
