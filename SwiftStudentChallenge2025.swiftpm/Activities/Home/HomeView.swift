@@ -5,6 +5,7 @@
 //  Created by Alessio Garzia Marotta Brusco on 09/02/25.
 //
 
+import SwiftData
 import SwiftUI
 
 // [] Scroll lag when showing welcome message.
@@ -12,44 +13,85 @@ import SwiftUI
 struct HomeView: View {
     @State private var topBarMinimized = false
     
+    @Query(filter: HomeView.activeSessionsFilter, sort: \.endDate) private var activeSessions: [StudySession]
+    @Query(filter: HomeView.completedSessionsFilter, sort: \.startDate) private var completedSessions: [StudySession]
+    
+    static let activeSessionsFilter = #Predicate<StudySession> { $0.completed == false }
+    static let completedSessionsFilter = #Predicate<StudySession> { $0.completed }
+    
+    @AppStorage(Model.currentSessionIDKey) private var currentSessionID: String?
+    
+    var currentSession: StudySession? {
+        guard
+            let currentSessionID,
+            let uuid = UUID(uuidString: currentSessionID),
+            let session = activeSessions.first(where: { $0.id == uuid })
+        else {
+            return nil
+        }
+        
+        return session
+    }
+    
+    var otherActiveSessions: [StudySession] {
+        guard let currentSession else {
+            return activeSessions
+        }
+        
+        return activeSessions.filter { $0.id != currentSession.id }
+    }
+    
     var body: some View {
-        ScrollView {
-            ForEach(0..<20, id: \.self) { i in
-                Text("\(i)")
-                    .padding(20)
-                    .background(.red)
+        NavigationStack {
+            ScrollView(showsIndicators: false) {
+                Section("Current") {
+                    if let currentSession {
+                        StudySessionItemView(session: currentSession)
+                    } else {
+                        Text("There's no current session.")
+                    }
+                }
+                
+                Divider()
+                
+                Section("Active") {
+                    ForEach(otherActiveSessions) { session in
+                            StudySessionItemView(session: session)
+                    }
+                }
+                
+                Section("Completed") {
+                    ForEach(completedSessions) { session in
+                            StudySessionItemView(session: session)
+                    }
+                }
             }
-            .compositingGroup()
-        }
-        .frame(maxWidth: .infinity)
-        .safeAreaInset(edge: .top) {
-            topBar
-        }
-        .onScrollGeometryChange(for: Double.self) { geometry in
-            geometry.contentOffset.y + geometry.contentInsets.top
-        } action: { oldValue, newValue in
-            print(newValue)
-            
-            if newValue >= 20 {
-                topBarMinimized = true
-            } else if newValue <= 10 {
-                topBarMinimized = false
+            .toolbarVisibility(.hidden, for: .navigationBar)
+            .frame(maxWidth: .infinity)
+            .safeAreaInset(edge: .top) {
+                topBar
+            }
+            .toggleOnScroll($topBarMinimized)
+            .navigationDestination(for: StudySession.self) { session in
+                Text(session.title)
+                    .onAppear {
+                        guard session.completed == false else { return }
+                        currentSessionID = session.id.uuidString
+                    }
             }
         }
     }
     
     var topBar: some View {
         TopBar(minimized: $topBarMinimized) {
-            Button {
-                
-            } label: {
-                
-            }
+            // Add buttons
         }
     }
 }
 
 #Preview {
-    HomeView()
-        .environment(Model.preview)
+    Previewer(model: .preview) {
+        HomeView()
+            .environment(Model.preview)
+    }
 }

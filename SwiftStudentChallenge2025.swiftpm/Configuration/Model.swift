@@ -17,6 +17,8 @@ final class Model {
     var shouldShowWelcomeScreen = true
 
     static let hasOnboardedKey = "hasOnboarded"
+    static let currentSessionIDKey = "currentSessionID"
+    
     static let preview = {
         let model = Model(inMemory: true)
         
@@ -40,15 +42,29 @@ final class Model {
     
     func generateSampleData() throws {
         for i in 0..<3 {
-            let goal = StudySession(
-                title: "Test Goal \(i)",
+            let session = StudySession(
+                title: "Test Session \(i)",
                 endDate: Calendar.current.date(byAdding: .day, value: 10 + i, to: .now) ?? .now
             )
             
             let steps = (0..<5).map { StudySession.Step(name: "Step \($0)", details: "Read chapter \($0+1)") }
-            goal.steps = steps
+            session.steps = steps
             
-            modelContext.insert(goal)
+            modelContext.insert(session)
+        }
+        
+        for i in 0..<3 {
+            let session = StudySession(
+                title: "Completed Session \(i)",
+                endDate: Calendar.current.date(byAdding: .day, value: -10 - i, to: .now) ?? .now
+            )
+            
+            session.completed = true
+            
+            let steps = (0..<5).map { StudySession.Step(name: "Step \($0)", details: "Read chapter \($0+1)") }
+            session.steps = steps
+            
+            modelContext.insert(session)
         }
         
         try modelContext.save()

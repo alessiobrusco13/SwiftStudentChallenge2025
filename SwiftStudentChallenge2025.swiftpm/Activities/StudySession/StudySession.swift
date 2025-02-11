@@ -10,6 +10,23 @@ import SwiftData
 
 @Model
 final class StudySession: Identifiable {
+    enum Symbol: String, Codable, CaseIterable {
+        case book = "book.fill"
+        case pencil = "pencil.and.outline"
+        case bookmark = "bookmark.fill"
+        case divide = "divide"
+        case microscope = "microscope"
+        case chart = "chart.bar.xaxis"
+        case textCursor = "character.cursor.ibeam"
+        case scroll = "scroll.fill"
+        case discussion = "bubble.left.and.bubble.right.fill"
+        case laptop = "laptopcomputer"
+        case gear = "gearshape.fill"
+        case desktop = "desktopcomputer"
+        case building = "building.columns.fill"
+        case globe = "globe"
+    }
+    
     @Attribute(.unique) var id: UUID
     
     var title: String
@@ -21,6 +38,7 @@ final class StudySession: Identifiable {
 #warning("It's important the user doesn't change the end date lightly. Be sure to prompt the user about it.")
     var endDate: Date
     
+    var symbol: Symbol?
     var appearance: Appearance
     
     init(
@@ -28,6 +46,7 @@ final class StudySession: Identifiable {
         details: String = "",
         completed: Bool = false,
         appearance: Appearance = Appearance(),
+        symbol: Symbol = .book,
         startDate: Date = .now,
         endDate: Date
     ) {
@@ -38,9 +57,14 @@ final class StudySession: Identifiable {
         self.details = details
         self.completed = completed
         self.appearance = appearance
+        self.symbol = symbol
         self.startDate = startDate
         self.endDate = endDate
     }
     
-    @MainActor static let example =  StudySession(title: "Newtonian mechanics exam", endDate: .now.addingTimeInterval(2*24*60*60))
+    @MainActor static let example = StudySession(
+        title: "Newtonian mechanics exam",
+        appearance: Appearance(titleFont: .serif),
+        endDate: .now.addingTimeInterval(2*24*60*60)
+    )
 }
