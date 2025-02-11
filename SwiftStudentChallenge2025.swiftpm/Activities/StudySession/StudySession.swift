@@ -21,15 +21,25 @@ final class StudySession: Identifiable {
 #warning("It's important the user doesn't change the end date lightly. Be sure to prompt the user about it.")
     var endDate: Date
     
-    init(title: String, details: String = "", startDate: Date = .now, endDate: Date, completed: Bool = false) {
+    var appearance: Appearance
+    
+    init(
+        title: String,
+        details: String = "",
+        completed: Bool = false,
+        appearance: Appearance = Appearance(),
+        startDate: Date = .now,
+        endDate: Date
+    ) {
         id = UUID()
         steps = []
         
         self.title = title
         self.details = details
+        self.completed = completed
+        self.appearance = appearance
         self.startDate = startDate
         self.endDate = endDate
-        self.completed = completed
     }
     
     @MainActor static let example =  StudySession(title: "Newtonian mechanics exam", endDate: .now.addingTimeInterval(2*24*60*60))
