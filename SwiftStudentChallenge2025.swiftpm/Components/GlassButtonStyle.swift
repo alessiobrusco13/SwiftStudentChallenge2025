@@ -13,7 +13,7 @@ struct GlassButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding(8)
-            .background(.ultraThinMaterial, in: .buttonBorder)
+            .background(.glass, in: .buttonBorder)
             .opacity(configuration.isPressed ? 0.7 : 1)
             .scaleEffect(configuration.isPressed ? 0.95 : 1)
             .colorScheme(.dark)

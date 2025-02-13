@@ -31,39 +31,34 @@ struct StudySessionItemView: View {
         session.appearance.itemColorRepresentation.color
     }
     
-    var isBackgroundLight: Bool {
-        itemColor.relativeLuminance > 0.5
-    }
-    
     var body: some View {
         NavigationLink(value: session) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 36)
-                    .foregroundStyle(itemColor.gradient)
-                
-                Text(session.title)
-                    .foregroundStyle(isBackgroundLight ? .black : .white)
-                    .font(.title)
-                    .fontWeight(.heavy)
-                    .fontDesign(titleFontDesign)
-                    .fontWidth(titleFontWidth)
-                    .frame(maxWidth: .infinity, maxHeight: . infinity, alignment: .bottomLeading)
-                    .padding(36)
-                
-                if let symbol = session.symbol {
-                    Image(systemName: symbol.rawValue)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 156, height: 156)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                        .padding(.horizontal, 36)
-                        .padding(.vertical, 26)
+            RoundedRectangle(cornerRadius: 40)
+                .fill(itemColor.gradient)
+                .frame(maxWidth: 370)
+                .frame(height: 390)
+                .overlay(alignment: .bottom) {
+                    Text(session.title)
+                        .foregroundStyle(.white)
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .fontWidth(titleFontWidth)
+                        .fontDesign(titleFontDesign)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(.glass, in: .rect(cornerRadius: 20))
+                        .padding(20)
                 }
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 320)
-            .padding(.horizontal)
+                .overlay(alignment: .topTrailing) {
+                    if session.completed {
+                        Image(systemName: "checkmark")
+                            .bold()
+                            .padding(10)
+                            .background(.glass, in: .circle)
+                            .padding(20)
+                    }
+                }
         }
         .buttonStyle(.pressable)
     }
@@ -75,4 +70,5 @@ struct StudySessionItemView: View {
     } contextHandler: { context in
         context.insert(StudySession.example)
     }
+    .preferredColorScheme(.dark)
 }

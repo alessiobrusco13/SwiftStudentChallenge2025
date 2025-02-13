@@ -48,7 +48,9 @@ final class Model {
             )
             
             let steps = (0..<5).map { StudySession.Step(name: "Step \($0)", details: "Read chapter \($0+1)") }
+            
             session.steps = steps
+            session.appearance.itemColorRepresentation = .random()
             
             modelContext.insert(session)
         }
@@ -62,7 +64,9 @@ final class Model {
             session.completed = true
             
             let steps = (0..<5).map { StudySession.Step(name: "Step \($0)", details: "Read chapter \($0+1)") }
+            
             session.steps = steps
+            session.appearance.itemColorRepresentation = .random()
             
             modelContext.insert(session)
         }

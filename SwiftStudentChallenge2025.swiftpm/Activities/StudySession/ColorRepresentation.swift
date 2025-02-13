@@ -13,6 +13,11 @@ struct ColorRepresentation: Codable {
     let blue: Double
     let opacity: Double
     
+    static func random() -> ColorRepresentation {
+        let colors: [Color] = [.red, .indigo, .blue, .white, .black, .green, .brown]
+        return ColorRepresentation(of: colors.randomElement()!)
+    }
+    
     init(of color: Color, in environment: EnvironmentValues = .init()) {
         let resolved = color.resolve(in: environment)
         
