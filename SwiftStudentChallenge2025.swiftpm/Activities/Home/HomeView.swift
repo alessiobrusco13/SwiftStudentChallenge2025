@@ -21,8 +21,6 @@ struct HomeView: View {
     
     @AppStorage(Model.currentSessionIDKey) private var currentSessionID: String?
     
-    @Environment(\.modelContext) private var modelContext
-    
     var currentSession: StudySession? {
         guard
             let currentSessionID,
@@ -119,14 +117,6 @@ struct HomeView: View {
             }
             .buttonBorderShape(.circle)
             .buttonStyle(.glass)
-        }
-    }
-    
-    func binding(for session: StudySession) -> Binding<StudySession> {
-        Binding {
-            session
-        } set: {
-            modelContext.insert($0)
         }
     }
 }

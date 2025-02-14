@@ -27,10 +27,13 @@ struct SessionDebugView: View {
             }
             
             ColorPicker("Item Color", selection: colorBinding)
+            
+            Picker("Symbol", selection: $session.symbol) {
+                ForEach(StudySession.Symbol.allCases, id: \.self) {
+                    Label($0.rawValue, systemImage: $0.rawValue)
+                        .tag($0)
+                }
+            }
         }
     }
 }
-
-//#Preview {
-//    SessionDebugView(session: .constant(.example))
-//}

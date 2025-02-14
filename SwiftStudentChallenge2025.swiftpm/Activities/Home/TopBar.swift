@@ -57,7 +57,7 @@ struct TopBar<Content: View>: View {
             content()
         }
         .padding(.horizontal)
-        .padding(.vertical, 5)
+        .padding(.vertical, 10)
         .animation(.bouncy, value: showingWelcome)
         .animation(.default, value: minimized)
         .task {

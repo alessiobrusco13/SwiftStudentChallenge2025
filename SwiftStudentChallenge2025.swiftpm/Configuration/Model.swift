@@ -44,12 +44,13 @@ final class Model {
         for i in 0..<3 {
             let session = StudySession(
                 title: "Test Session \(i)",
-                endDate: Calendar.current.date(byAdding: .day, value: 10 + i, to: .now) ?? .now
+                endDate: Calendar.current.date(byAdding: .day, value: 4 + i, to: .now) ?? .now
             )
             
             let steps = (0..<5).map { StudySession.Step(name: "Step \($0)", details: "Read chapter \($0+1)") }
             
             session.steps = steps
+            session.symbol = StudySession.Symbol.allCases.randomElement()!
             session.appearance.itemColorRepresentation = .random()
             
             modelContext.insert(session)
@@ -66,6 +67,7 @@ final class Model {
             let steps = (0..<5).map { StudySession.Step(name: "Step \($0)", details: "Read chapter \($0+1)") }
             
             session.steps = steps
+            session.symbol = StudySession.Symbol.allCases.randomElement()!
             session.appearance.itemColorRepresentation = .random()
             
             modelContext.insert(session)

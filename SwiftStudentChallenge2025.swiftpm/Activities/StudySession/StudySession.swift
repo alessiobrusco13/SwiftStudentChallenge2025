@@ -11,16 +11,21 @@ import SwiftData
 @Model
 final class StudySession: Identifiable {
     enum Symbol: String, Codable, CaseIterable {
-        case book = "book.fill"
+        case book = "book.pages.fill"
         case pencil = "pencil.and.outline"
         case bookmark = "bookmark.fill"
         case divide = "divide"
-        case microscope = "microscope"
+        case function = "function"
+        case sum = "sum"
+        case medical = "heart.text.square.fill"
+        case fluidBag = "ivfluid.bag"
+        case brain = "brain.fill"
         case chart = "chart.bar.xaxis"
         case textCursor = "character.cursor.ibeam"
         case scroll = "scroll.fill"
         case discussion = "bubble.left.and.bubble.right.fill"
         case laptop = "laptopcomputer"
+        case arcade = "arcade.stick.console.fill"
         case gear = "gearshape.fill"
         case desktop = "desktopcomputer"
         case building = "building.columns.fill"
