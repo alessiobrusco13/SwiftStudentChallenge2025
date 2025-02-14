@@ -46,6 +46,8 @@ final class StudySession: Identifiable {
     var symbol: Symbol?
     var appearance: Appearance
     
+    @Relationship(deleteRule: .cascade, inverse: \EmotionLog.session) var emotionLogs = [EmotionLog]()
+    
     init(
         title: String,
         details: String = "",

@@ -95,9 +95,7 @@ struct HomeView: View {
     }
     
     var topBar: some View {
-        TopBar(minimized: $topBarMinimized) {
-            // Add buttons
-            
+        TopBar(minimized: $topBarMinimized) {    
             Button {
                 
             } label: {

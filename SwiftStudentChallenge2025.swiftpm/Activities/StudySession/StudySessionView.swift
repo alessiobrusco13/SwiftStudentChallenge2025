@@ -10,22 +10,36 @@ import SwiftUI
 struct StudySessionView: View {
     @Bindable var session: StudySession
     
-    @State private var showingDebug = false
+    @Environment(Model.self) private var model
+    @Environment(\.modelContext) private var modelContext
     @AppStorage(Model.currentSessionIDKey) private var currentSessionID: String?
     
+    @State private var showingDebug = false
+    @State private var showingEmotionLogger = false
+    
     var body: some View {
-        Text(session.title)
-            .toolbar {
-                Button("Debug", systemImage: "wrench.adjustable") {
-                    showingDebug.toggle()
-                }
+        VStack {
+            if showingEmotionLogger {
+                EmotionLogView()
             }
-            .sheet(isPresented: $showingDebug) {
-                SessionDebugView(session: session)
-                    .presentationDetents([.medium])
+            
+            Text(session.title)
+        }
+        .toolbar {
+            Button("Debug", systemImage: "wrench.adjustable") {
+                showingDebug.toggle()
             }
-            .onAppear {
-                currentSessionID = session.id.uuidString
+        }
+        .sheet(isPresented: $showingDebug) {
+            SessionDebugView(session: session)
+                .presentationDetents([.medium])
+        }
+        .onAppear {
+            currentSessionID = session.id.uuidString
+            
+            withAnimation {
+                showingEmotionLogger = model.shouldShowEmotionLogger(for: session, context: modelContext)
             }
+        }
     }
 }

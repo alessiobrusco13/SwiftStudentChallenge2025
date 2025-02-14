@@ -18,14 +18,28 @@ extension ShapeStyle where Self == _ShadowShapeStyle<_ShadowShapeStyle<Material>
                     y: 0.5
                 )
             )
+            
+    }
+    
+    static func glass(shadowRadius: Double = 10, opacity: Double = 1) -> some ShapeStyle {
+        Material.ultraThinMaterial
+            .shadow(
+                .inner(
+                    color: .white.opacity(0.3),
+                    radius: 0.8,
+                    x: 0.5,
+                    y: 0.5
+                )
+            )
             .shadow(
                 .drop(
                     color: .black.opacity(0.2),
-                    radius: 10,
+                    radius: shadowRadius,
                     x: 3,
                     y: 3
                 )
             )
+            .opacity(opacity)
     }
 }
 
@@ -40,13 +54,26 @@ extension ShapeStyle where Self == _ShadowShapeStyle<_ShadowShapeStyle<Material>
                     y: 0.5
                 )
             )
+    }
+    
+    static func prominentGlass(shadowRadius: Double = 10, opacity: Double = 1) -> some ShapeStyle {
+        Material.thinMaterial
+            .shadow(
+                .inner(
+                    color: .white.opacity(0.3),
+                    radius: 0.8,
+                    x: 0.5,
+                    y: 0.5
+                )
+            )
             .shadow(
                 .drop(
                     color: .black.opacity(0.2),
-                    radius: 10,
+                    radius: shadowRadius,
                     x: 3,
                     y: 3
                 )
             )
+            .opacity(opacity)
     }
 }
