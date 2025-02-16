@@ -12,6 +12,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var topBarMinimized = false
+    @Namespace private var namespace
     
     @Query(filter: HomeView.activeSessionsFilter, sort: \.endDate) private var activeSessions: [StudySession]
     @Query(filter: HomeView.completedSessionsFilter, sort: \.startDate) private var completedSessions: [StudySession]
@@ -44,38 +45,28 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                BackgroundView()
-                    .overlay {
-                        Rectangle()
-                            .fill(.ultraThinMaterial)
-                            .ignoresSafeArea()
-                    }
-                    .blur(radius: 10)
+//                Rectangle()
+//                    .fill(Color.black.gradient)
+                AnimatedBackgroundView()
+                    .opacity(0.8)
+                    .ignoresSafeArea()
                 
                 ScrollView(showsIndicators: false) {
-                    Section("Current") {
-                        if let currentSession {
-                            StudySessionItemView(session: currentSession)
-                        } else {
-                            Text("There's no current session.")
-                        }
-                    }
-                    
-                    Divider()
-                    
-                    Section("Active") {
-                        VStack(spacing: 20) {
-                            ForEach(otherActiveSessions) { session in
-                                StudySessionItemView(session: session)
+                    VStack(spacing: 15) {
+                        //                        if let currentSession {
+                        //                            StudySessionItemView(session: currentSession)
+                        //                        }
+                        
+                        ForEach(activeSessions + completedSessions) { session in
+                            NavigationLink {
+                                StudySessionView(session: session)
+                                    .navigationTransition(.zoom(sourceID: session.id, in: namespace))
+                            } label: {
+                                StudySessionItemView(session: session, namespace: namespace)
+                                    .shadow(color: .black.opacity(0.1), radius: 10)
                             }
-                        }
-                    }
-                    
-                    Section("Completed") {
-                        VStack(spacing: 20) {
-                            ForEach(completedSessions) { session in
-                                StudySessionItemView(session: session)
-                            }
+                            .buttonStyle(.pressable)
+                            .padding(.horizontal)
                         }
                     }
                 }
@@ -85,13 +76,9 @@ struct HomeView: View {
                     topBar
                 }
                 .toggleOnScroll($topBarMinimized)
-                .navigationDestination(for: StudySession.self) { session in
-                    StudySessionView(session: session)
-                }
             }
+            .animation(.default, value: otherActiveSessions + completedSessions)
         }
-        .animation(.default, value: otherActiveSessions)
-        .animation(.default, value: completedSessions)
     }
     
     var topBar: some View {

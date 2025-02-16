@@ -7,10 +7,11 @@
 
 import SwiftUI
 
-// [] Show deadline but only when it is close enough to the present day, otherwise it might case further procrastination. [Paper](https://typeset.io/papers/on-the-interaction-of-memory-and-procrastination-4kckmuyj2u)
+// [X] Show deadline but only when it is close enough to the present day, otherwise it might case further procrastination. [Paper](https://typeset.io/papers/on-the-interaction-of-memory-and-procrastination-4kckmuyj2u)
 
 struct StudySessionItemView: View {
     let session: StudySession
+    let namespace: Namespace.ID
     
     var titleFontDesign: Font.Design {
         switch session.appearance.titleFont {
@@ -53,50 +54,49 @@ struct StudySessionItemView: View {
     }
     
     var body: some View {
-        NavigationLink(value: session) {
-            RoundedRectangle(cornerRadius: 40)
-                .fill(itemColor.gradient)
-                .frame(maxWidth: 370)
-                .padding(.horizontal)
-                .frame(height: 390)
-                .overlay(alignment: .bottom) {
-                    Text(session.title)
+        RoundedRectangle(cornerRadius: 40)
+            .fill(itemColor.gradient.opacity(0.6))
+            .frame(maxWidth: 370)
+            .frame(height: 390)
+            .matchedTransitionSource(id: session.id, in: namespace)
+            .overlay(alignment: .bottom) {
+                Text(session.title)
+                    .foregroundStyle(.white)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .fontWidth(titleFontWidth)
+                    .fontDesign(titleFontDesign)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(.glass, in: .capsule)
+                    .padding(20)
+                    .colorScheme(.dark)
+            }
+            .overlay(alignment: .topTrailing) {
+                if session.completed {
+                    icon(for: "checkmark")
+                } else if let deadlineText {
+                    Text(deadlineText)
                         .foregroundStyle(.white)
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .fontWidth(titleFontWidth)
-                        .fontDesign(titleFontDesign)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity)
-                        .padding()
+                        .font(.subheadline.bold().smallCaps())
+                        .fontDesign(.rounded)
+                        .padding(12)
                         .background(.glass, in: .capsule)
                         .padding(20)
-                        .padding(.horizontal)
+                        .colorScheme(.dark)
+                    
                 }
-                .overlay(alignment: .topTrailing) {
-                    if session.completed {
-                        icon(for: "checkmark")
-                    } else if let deadlineText {
-                        Text(deadlineText)
-                            .font(.subheadline.bold().smallCaps())
-                            .fontDesign(.rounded)
-                            .padding(12)
-                            .background(.glass, in: .capsule)
-                            .padding(20)
-                            .padding(.horizontal)
-                        
-                    }
+            }
+            .overlay(alignment: .topLeading) {
+                if let symbol = session.symbol {
+                    icon(for: symbol.rawValue)
                 }
-                .overlay(alignment: .topLeading) {
-                    if let symbol = session.symbol {
-                        icon(for: symbol.rawValue)
-                    }
-                }
-        }
-        .buttonStyle(.pressable)
+            }
+            .compositingGroup()
     }
     
-    func icon(for symbol: String) -> some View {
+    private func icon(for symbol: String) -> some View {
         Image(systemName: symbol)
             .resizable()
             .scaledToFit()
@@ -105,13 +105,15 @@ struct StudySessionItemView: View {
             .padding(12)
             .background(.glass, in: .circle)
             .padding(20)
-            .padding(.horizontal)
+            .colorScheme(.dark)
     }
 }
 
 #Preview {
+    @Previewable @Namespace var namespace
+    
     Previewer(for: StudySession.self) {
-        StudySessionItemView(session: .example)
+        StudySessionItemView(session: .example, namespace: namespace)
     } contextHandler: { context in
         context.insert(StudySession.example)
     }

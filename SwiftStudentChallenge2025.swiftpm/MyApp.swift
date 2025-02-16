@@ -1,5 +1,8 @@
 import SwiftUI
 
+// – [] iPad optimization
+//
+    
 @main
 struct MyApp: App {
     @State private var model = Model.preview

@@ -1,5 +1,5 @@
 //
-//  ToggleOnScrolldownModifier.swift
+//  ToggleOnScrollModifier.swift
 //  SwiftStudentChallenge2025
 //
 //  Created by Alessio Garzia Marotta Brusco on 11/02/25.

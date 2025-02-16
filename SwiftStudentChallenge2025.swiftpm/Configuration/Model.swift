@@ -48,7 +48,6 @@ final class Model {
             $0.symbol = StudySession.Symbol.allCases.randomElement()!
             $0.appearance.itemColorRepresentation = .random()
             $0.appearance.titleFont = StudySession.Appearance.TitleFont.allCases.randomElement()!
-            
         }
         
         for i in 0..<3 {
@@ -94,8 +93,7 @@ final class Model {
     func shouldShowEmotionLogger(for session: StudySession, context: ModelContext) -> Bool {
         if let lastLog = lastEmotionLog(in: modelContext), (Date.now.timeIntervalSince1970 - lastLog.date.timeIntervalSince1970) < 30*60 {
             return false
-        } else if let lastSessionLog = lastEmotionLog(for: session),
-                  (Date.now.timeIntervalSince1970 - lastSessionLog.date.timeIntervalSince1970) < 4*60*60 {
+        } else if let lastSessionLog = lastEmotionLog(for: session), (Date.now.timeIntervalSince1970 - lastSessionLog.date.timeIntervalSince1970) < 4*60*60 {
             return false
         } else {
             return true

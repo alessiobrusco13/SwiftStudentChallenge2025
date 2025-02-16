@@ -18,18 +18,21 @@ struct StudySessionView: View {
     @State private var showingEmotionLogger = false
     
     var body: some View {
-        VStack {
-            if showingEmotionLogger {
-                EmotionLogView()
+        ZStack {
+            Group {
+                Rectangle()
+                    .fill(session.appearance.itemColorRepresentation.color.gradient.opacity(0.5))
+             
+                ProgressiveBlur()
             }
-            
-            Text(session.title)
+            .ignoresSafeArea()
         }
         .toolbar {
             Button("Debug", systemImage: "wrench.adjustable") {
                 showingDebug.toggle()
             }
         }
+        .emotionLogger(isPresented: $showingEmotionLogger, session: session)
         .sheet(isPresented: $showingDebug) {
             SessionDebugView(session: session)
                 .presentationDetents([.medium])
@@ -37,8 +40,12 @@ struct StudySessionView: View {
         .onAppear {
             currentSessionID = session.id.uuidString
             
-            withAnimation {
-                showingEmotionLogger = model.shouldShowEmotionLogger(for: session, context: modelContext)
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(0.3))
+                
+                withAnimation {
+                    showingEmotionLogger = model.shouldShowEmotionLogger(for: session, context: modelContext)
+                }
             }
         }
     }
