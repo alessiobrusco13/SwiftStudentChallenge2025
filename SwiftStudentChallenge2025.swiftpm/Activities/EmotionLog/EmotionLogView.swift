@@ -17,7 +17,7 @@ struct EmotionLogView: View {
     var body: some View {
         VStack(spacing: 20) {
             VStack(spacing: 10) {
-                Text("How are you feeling right now?")
+                Text("Hold on, how are you feeling right now?")
                     .lineLimit(2, reservesSpace: true)
                     .font(.title3)
                     .fontWeight(.bold)

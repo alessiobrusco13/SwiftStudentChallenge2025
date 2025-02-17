@@ -8,10 +8,12 @@
 import SwiftData
 import SwiftUI
 
-// [] Scroll lag when showing welcome message.
+// – [] Scroll lag when showing welcome message.
+// – [] Show 'current' session.
 
 struct HomeView: View {
     @State private var topBarMinimized = false
+    @State private var selection: StudySession?
     @Namespace private var namespace
     
     @Query(filter: HomeView.activeSessionsFilter, sort: \.endDate) private var activeSessions: [StudySession]
@@ -45,10 +47,7 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-//                Rectangle()
-//                    .fill(Color.black.gradient)
                 AnimatedBackgroundView()
-                    .opacity(0.8)
                     .ignoresSafeArea()
                 
                 ScrollView(showsIndicators: false) {
@@ -58,9 +57,8 @@ struct HomeView: View {
                         //                        }
                         
                         ForEach(activeSessions + completedSessions) { session in
-                            NavigationLink {
-                                StudySessionView(session: session)
-                                    .navigationTransition(.zoom(sourceID: session.id, in: namespace))
+                            Button {
+                                selection = session
                             } label: {
                                 StudySessionItemView(session: session, namespace: namespace)
                                     .shadow(color: .black.opacity(0.1), radius: 10)
@@ -78,6 +76,10 @@ struct HomeView: View {
                 .toggleOnScroll($topBarMinimized)
             }
             .animation(.default, value: otherActiveSessions + completedSessions)
+            .fullScreenCover(item: $selection) { session in
+                StudySessionView(session: session)
+                    .navigationTransition(.zoom(sourceID: session.id, in: namespace))
+            }
         }
     }
     

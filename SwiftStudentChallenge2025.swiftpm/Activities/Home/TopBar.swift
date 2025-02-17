@@ -47,7 +47,6 @@ struct TopBar<Content: View>: View {
                     Text(formattedDate)
                         .font((showingWelcome || minimized) ? .body : .title2)
                         .foregroundStyle((showingWelcome && !minimized) ?  .tertiary : .secondary)
-                    //            .fontWidth(.expanded)
                 }
                 .fontWeight(.bold)
             }

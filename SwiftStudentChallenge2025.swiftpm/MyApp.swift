@@ -1,7 +1,15 @@
 import SwiftUI
 
-// – [] iPad optimization
-//
+// – [] App name
+// – [] Essays
+
+// – [] Session Creation
+// – [] Fix background view (use a timeline view)
+// – [] Inside Session view
+// – [] Session Cration (Ask 'what are you doing this for?' 'Other times this has gone through' etc)
+// – [] iPad optimization (what to show alongside the sessions)
+// – [] Onboarding
+// ? [] VoiceOver
     
 @main
 struct MyApp: App {

@@ -13,19 +13,19 @@ struct EmotionLoggerModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .animation(.snappy, value: isPresented)
+            .animation(.smooth, value: isPresented)
             .overlay {
                 if isPresented {
                     EmotionLogView(session: session) {
                         isPresented = false
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .transition(.move(edge: .bottom))
                     .background {
                         ProgressiveBlur()
                             .ignoresSafeArea()
                             .transition(.opacity)
                     }
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
     }

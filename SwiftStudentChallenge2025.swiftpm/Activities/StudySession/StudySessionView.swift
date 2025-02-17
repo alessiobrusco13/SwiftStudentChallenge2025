@@ -12,31 +12,35 @@ struct StudySessionView: View {
     
     @Environment(Model.self) private var model
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
     @AppStorage(Model.currentSessionIDKey) private var currentSessionID: String?
     
     @State private var showingDebug = false
     @State private var showingEmotionLogger = false
     
     var body: some View {
-        ZStack {
-            Group {
+        NavigationStack {
+            ZStack {
                 Rectangle()
                     .fill(session.appearance.itemColorRepresentation.color.gradient.opacity(0.5))
-             
-                ProgressiveBlur()
+                        .ignoresSafeArea()
             }
-            .ignoresSafeArea()
-        }
-        .toolbar {
-            Button("Debug", systemImage: "wrench.adjustable") {
-                showingDebug.toggle()
+            .navigationTitle(session.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button("Home", systemImage: "chevron.down") {
+                    dismiss()
+                }
+                .buttonBorderShape(.circle)
+                .buttonStyle(.glass)
             }
         }
-        .emotionLogger(isPresented: $showingEmotionLogger, session: session)
-        .sheet(isPresented: $showingDebug) {
-            SessionDebugView(session: session)
-                .presentationDetents([.medium])
+        .presentationBackground {
+            // Not the best implementation
+            AnimatedBackgroundView()
         }
+//        .emotionLogger(isPresented: $showingEmotionLogger, session: session)
         .onAppear {
             currentSessionID = session.id.uuidString
             

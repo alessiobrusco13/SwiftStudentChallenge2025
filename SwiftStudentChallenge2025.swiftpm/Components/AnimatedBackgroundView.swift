@@ -1,5 +1,5 @@
 //
-//  BackgroundView.swift
+//  AnimatedBackgroundView.swift
 //  SwiftStudentChallenge2025
 //
 //  Created by Alessio Garzia Marotta Brusco on 12/02/25.
@@ -26,8 +26,8 @@ struct AnimatedBackgroundView: View {
             [sinInRange(1.0...1.5, offset: 0.939, timeScale: 0.056, t: t), sinInRange(1.3...1.7, offset: 0.47, timeScale: 0.342, t: t)]
         ], colors: [
             .pink.opacity(0.4), .yellow.opacity(0.4), .indigo.opacity(0.4),
-            .orange.opacity(0.2), .black, .purple.opacity(0.3),
-            .pink.opacity(0.8), .white.opacity(0.6), .mint.opacity(0.8)
+            .orange.opacity(0.5), .black, .purple.opacity(0.5),
+            .mint.opacity(0.4), .white.opacity(0.6), .black
         ])
         .onAppear {
             timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
@@ -38,7 +38,8 @@ struct AnimatedBackgroundView: View {
         }
         .background(.black)
         .ignoresSafeArea()
-        .padding(-10)
+        .clipShape(.rect(cornerRadius: 20))
+        .padding(-5)
         .blur(radius: 5)
     }
     
