@@ -13,21 +13,6 @@ struct StudySessionItemView: View {
     let session: StudySession
     let namespace: Namespace.ID
     
-    var titleFontDesign: Font.Design {
-        switch session.appearance.titleFont {
-        case .rounded: .rounded
-        case .serif: .serif
-        default: .default
-        }
-    }
-    
-    var titleFontWidth: Font.Width {
-        switch session.appearance.titleFont {
-        case .expanded: .expanded
-        default: .standard
-        }
-    }
-    
     var itemColor: Color {
         session.appearance.itemColorRepresentation.color
     }
@@ -64,8 +49,7 @@ struct StudySessionItemView: View {
                     .foregroundStyle(.white)
                     .font(.title3)
                     .fontWeight(.bold)
-                    .fontWidth(titleFontWidth)
-                    .fontDesign(titleFontDesign)
+                    .fontStyling(for: session)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
                     .padding()

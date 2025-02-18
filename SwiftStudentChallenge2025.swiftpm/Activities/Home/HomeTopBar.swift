@@ -1,5 +1,5 @@
 //
-//  TopBar.swift
+//  HomeTopBar.swift
 //  SwiftStudentChallenge2025
 //
 //  Created by Alessio Garzia Marotta Brusco on 09/02/25.
@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-// [X] Custom Title View that starts off with a greeting and becomes date.
+// [~] Custom Title View that starts off with a greeting and becomes date.
 // [X] ~Variable Blur background.
 // [X] Minimisation on scroll.
 // [X] Date format localisation.
 
-struct TopBar<Content: View>: View {
-    @Binding var minimized: Bool
+struct HomeTopBar<Content: View>: View {
+    let minimized: Bool
     @ViewBuilder let content: () -> Content
     
     @Environment(Model.self) private var model
@@ -55,10 +55,7 @@ struct TopBar<Content: View>: View {
             
             content()
         }
-        .padding(.horizontal)
-        .padding(.vertical, 10)
         .animation(.bouncy, value: showingWelcome)
-        .animation(.default, value: minimized)
         .task {
             guard model.shouldShowWelcomeScreen else { return }
             
@@ -68,10 +65,6 @@ struct TopBar<Content: View>: View {
             
             model.shouldShowWelcomeScreen = false
         }
-        .background {
-            ProgressiveBlur()
-                .padding(.top, -100)
-        }
     }
 }
 
@@ -80,7 +73,7 @@ struct TopBar<Content: View>: View {
     
     ZStack {
         VStack {
-            TopBar(minimized: $minimized) {
+            HomeTopBar(minimized: minimized) {
                 Button {
                     
                 } label: {

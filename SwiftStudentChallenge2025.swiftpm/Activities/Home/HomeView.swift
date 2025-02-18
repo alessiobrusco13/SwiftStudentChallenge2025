@@ -70,40 +70,34 @@ struct HomeView: View {
                 }
                 .toolbarVisibility(.hidden, for: .navigationBar)
                 .frame(maxWidth: .infinity)
-                .safeAreaInset(edge: .top) {
-                    topBar
+                .topBar { minimized in
+                    HomeTopBar(minimized: minimized) {
+                        Button {
+                        } label: {
+                            Image(systemName: "plus")
+                                .fontWeight(.bold)
+                                .font(.title3)
+                        }
+                        .buttonBorderShape(.circle)
+                        .buttonStyle(.glassProminent)
+                        
+                        Button {
+                            
+                        } label: {
+                            Image(systemName: "gear")
+                                .fontWeight(.bold)
+                                .font(.title3)
+                        }
+                        .buttonBorderShape(.circle)
+                        .buttonStyle(.glass)
+                    }
                 }
-                .toggleOnScroll($topBarMinimized)
-            }
-            .animation(.default, value: otherActiveSessions + completedSessions)
-            .fullScreenCover(item: $selection) { session in
-                StudySessionView(session: session)
-                    .navigationTransition(.zoom(sourceID: session.id, in: namespace))
             }
         }
-    }
-    
-    var topBar: some View {
-        TopBar(minimized: $topBarMinimized) {    
-            Button {
-                
-            } label: {
-                Image(systemName: "plus")
-                    .fontWeight(.bold)
-                    .font(.title3)
-            }
-            .buttonBorderShape(.circle)
-            .buttonStyle(.glassProminent)
-            
-            Button {
-                
-            } label: {
-                Image(systemName: "gear")
-                    .fontWeight(.bold)
-                    .font(.title3)
-            }
-            .buttonBorderShape(.circle)
-            .buttonStyle(.glass)
+        .animation(.default, value: otherActiveSessions + completedSessions)
+        .fullScreenCover(item: $selection) { session in
+            StudySessionView(session: session)
+                .navigationTransition(.zoom(sourceID: session.id, in: namespace))
         }
     }
 }
@@ -112,6 +106,6 @@ struct HomeView: View {
     Previewer(model: .preview) {
         HomeView()
             .environment(Model.preview)
-            
+        
     }
 }

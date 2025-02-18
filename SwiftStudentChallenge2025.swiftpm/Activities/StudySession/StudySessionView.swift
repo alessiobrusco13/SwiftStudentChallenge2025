@@ -23,24 +23,39 @@ struct StudySessionView: View {
         NavigationStack {
             ZStack {
                 Rectangle()
-                    .fill(session.appearance.itemColorRepresentation.color.gradient.opacity(0.5))
-                        .ignoresSafeArea()
-            }
-            .navigationTitle(session.title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                Button("Home", systemImage: "chevron.down") {
-                    dismiss()
+                    .fill(session.appearance.itemColorRepresentation.color.gradient.opacity(0.4))
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    ForEach(0..<100, id: \.self) {
+                        Text("\($0)")
+                            .padding(30)
+                            .background(.glass, in: .circle)
+                    }
                 }
-                .buttonBorderShape(.circle)
-                .buttonStyle(.glass)
             }
+            .topBar(title: session.title, behavior: .alwaysMinimized) { title in
+                title
+                    .fontStyling(for: session)
+                    .overlay(alignment: .leading) {
+                        Button(action: dismiss.callAsFunction) {
+                            Label("Home", systemImage: "xmark")
+                                .font(.title3)
+                                .fontWeight(.bold)
+                                .labelStyle(.iconOnly)
+                                .padding(1)
+                        }
+                        .buttonStyle(.glass)
+                        .buttonBorderShape(.circle)
+                    }
+            }
+            .toolbarVisibility(.hidden)
         }
         .presentationBackground {
             // Not the best implementation
             AnimatedBackgroundView()
         }
-//        .emotionLogger(isPresented: $showingEmotionLogger, session: session)
+        //        .emotionLogger(isPresented: $showingEmotionLogger, session: session)
         .onAppear {
             currentSessionID = session.id.uuidString
             
