@@ -65,7 +65,7 @@ extension View {
             TopBarModifier<AnyView>(behavior: behavior) { minimized in
                 AnyView(
                     Text(title)
-                        .font(minimized ? .title3 : .largeTitle)
+                        .font(minimized ? .body : .largeTitle)
                         .bold()
                         .frame(maxWidth: .infinity, alignment: minimized ? .center : .leading)
                 )
@@ -73,24 +73,24 @@ extension View {
         )
     }
     
-    func topBar<Content: View>(
-        title: String,
-        behavior: TopBarBehavior = .standard,
-        @ViewBuilder content: @escaping (_ title: AnyView) -> Content
-    ) -> some View {
-        modifier(
-            TopBarModifier<Content>(behavior: behavior) { minimized in
-                content(
-                    AnyView(
-                        Text(title)
-                            .font(minimized ? .title3 : .largeTitle)
-                            .bold()
-                            .frame(maxWidth: .infinity, alignment: minimized ? .center : .leading)
-                    )
-                )
-            }
-        )
-    }
+//    func topBar<Content: View>(
+//        title: String,
+//        behavior: TopBarBehavior = .standard,
+//        @ViewBuilder content: @escaping (_ title: AnyView) -> Content
+//    ) -> some View {
+//        modifier(
+//            TopBarModifier<Content>(behavior: behavior) { minimized in
+//                content(
+//                    AnyView(
+//                        Text(title)
+//                            .font(minimized ? .title3 : .largeTitle)
+//                            .bold()
+//                            .frame(maxWidth: .infinity, alignment: minimized ? .center : .leading)
+//                    )
+//                )
+//            }
+//        )
+//    }
     
     func topBar<Content: View>(behavior: TopBarBehavior = .standard, @ViewBuilder content: @escaping (_ minimized: Bool) -> Content) -> some View {
         modifier(TopBarModifier(behavior: behavior, topBarContent: content))

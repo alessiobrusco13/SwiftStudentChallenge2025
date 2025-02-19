@@ -40,12 +40,12 @@ struct HomeTopBar<Content: View>: View {
                 
                 HStack(alignment: .firstTextBaseline) {
                     Text("Today")
-                        .font((showingWelcome || minimized) ? .title3 : .largeTitle)
+                        .font((showingWelcome || minimized) ? .headline : .largeTitle)
                         .foregroundStyle((showingWelcome && !minimized) ?  .secondary : .primary)
                     
                     
                     Text(formattedDate)
-                        .font((showingWelcome || minimized) ? .body : .title2)
+                        .font((showingWelcome || minimized) ? .callout : .title2)
                         .foregroundStyle((showingWelcome && !minimized) ?  .tertiary : .secondary)
                 }
                 .fontWeight(.bold)

@@ -10,6 +10,8 @@ import SwiftUI
 // – [] iPad optimization (what to show alongside the sessions)
 // – [] Onboarding
 // ? [] VoiceOver
+
+// – [] Consider removing Today Title and having a different way of showing time
     
 @main
 struct MyApp: App {
