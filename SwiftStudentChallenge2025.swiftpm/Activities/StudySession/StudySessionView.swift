@@ -43,14 +43,14 @@ struct StudySessionView: View {
             // Not the best implementation
             AnimatedBackgroundView()
         }
-                .emotionLogger(isPresented: $showingEmotionLogger, session: session)
+        .emotionLogger(isPresented: $showingEmotionLogger, session: session)
         .onAppear {
             currentSessionID = session.id.uuidString
             
             Task { @MainActor in
                 try? await Task.sleep(for: .seconds(0.6))
                 
-                withAnimation {
+                withAnimation(.smooth) {
                     showingEmotionLogger = model.shouldShowEmotionLogger(for: session, context: modelContext)
                 }
             }

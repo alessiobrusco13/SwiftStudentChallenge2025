@@ -20,7 +20,10 @@ struct EmotionLoggerModifier: ViewModifier {
                         isPresented = false
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .transition(.move(edge: .bottom))
+                    .transition(
+                        .move(edge: .bottom)
+                        .combined(with: .opacity)
+                    )
                     .background {
                         ProgressiveBlur()
                             .ignoresSafeArea()

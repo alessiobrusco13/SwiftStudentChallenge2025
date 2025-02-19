@@ -5,7 +5,6 @@ import SwiftUI
 
 // – [] Session Creation
 // – [] Fix background view (use a timeline view)
-// – [] Inside Session view
 // – [] Session Cration (Ask 'what are you doing this for?' 'Other times this has gone through' etc)
 // – [] iPad optimization (what to show alongside the sessions)
 // – [] Onboarding
@@ -13,6 +12,14 @@ import SwiftUI
 
 // – [] Consider removing Today Title and having a different way of showing time
     
+// – [] Inside Session view
+//  – [] solo la prossima task + modo per vedere le altre
+//  – [] perché stai studiando questa roba? (motivazionale)
+//  – [] pulsante per iniziare e smettere di lockarsi
+//  – [] ricordare di fare pause
+//  – [] resoconto mood nel mentre
+//  – [] invitare a pensare al perché delle cose (perché sto per procrastinare) magari quando si clicca il pulsante per fermarsi
+
 @main
 struct MyApp: App {
     @State private var model = Model.preview

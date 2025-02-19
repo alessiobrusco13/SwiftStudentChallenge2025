@@ -14,6 +14,8 @@ extension StudySession {
         var details: String
         var completed: Bool
         
+        static let example = Step(name: "Fluid Dynamics", details: "'Fisica Generale 1' by Giorgio Rosati. Pages 44-75.")
+        
         init(name: String, details: String = "", completed: Bool = false) {
             id = UUID()
             self.name = name
