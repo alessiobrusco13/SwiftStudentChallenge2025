@@ -69,9 +69,17 @@ final class StudySession: Identifiable {
         self.endDate = endDate
     }
     
-    @MainActor static let example = StudySession(
-        title: "Newtonian mechanics exam",
-        appearance: Appearance(titleFont: .serif),
-        endDate: .now.addingTimeInterval(2*24*60*60)
-    )
+    @MainActor static let example = {
+        let session = StudySession(
+            title: "Newtonian mechanics exam",
+            appearance: Appearance(titleFont: .serif),
+            endDate: .now.addingTimeInterval(2*24*60*60)
+        )
+        
+        session.steps = (0..<5).map {
+            Step(name: "Step \($0)", details: "This is an amazing example step. You should be very careful and execute everything. Do things one at a time to ensure you understand everything and don't feel anxious.")
+        }
+        
+        return session
+    }()
 }

@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// When i tap on the text it turns into a textfield
+
 struct StepRowView: View {
     @Binding var step: StudySession.Step
     @Binding var selection: StudySession.Step?
@@ -40,9 +42,7 @@ struct StepRowView: View {
             
             VStack(alignment: .leading, spacing: 5) {
                 Button {
-                    withAnimation(.default) {
-                        selection = step
-                    }
+                    selection = step
                 } label: {
                     HStack {
                         Text(step.name)
@@ -66,7 +66,13 @@ struct StepRowView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(.prominentGlass.opacity(isSelected ? 1 : 0), in: .rect(cornerRadius: 24))
+        .background {
+            RoundedRectangle(cornerRadius: 24)
+                .fill(.prominentGlass.opacity(isSelected ? 1 : 0))
+                .onTapGesture {
+                    // To make it so that in the 'StepsView', when you tap on the background it doesn't deselect.
+                }
+        }
         .padding(.horizontal)
     }
 }
@@ -80,9 +86,7 @@ struct StepRowView: View {
             .ignoresSafeArea()
         
         Button {
-            withAnimation {
-                selection = nil
-            }
+            selection = nil
         } label: {
             Rectangle()
                 .fill(.black.opacity(selection == nil ? 0 : 0.2))
@@ -94,4 +98,5 @@ struct StepRowView: View {
         StepRowView(step: $step, selection: $selection)
             .preferredColorScheme(.dark)
     }
+    .animation(.default.speed(2), value: selection?.id)
 }
