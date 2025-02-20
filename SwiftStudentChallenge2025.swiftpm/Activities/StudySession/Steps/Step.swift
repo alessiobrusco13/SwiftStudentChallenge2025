@@ -8,7 +8,7 @@
 import Foundation
 
 extension StudySession {
-    struct Step: Codable, Identifiable {
+    struct Step: Codable, Identifiable, Equatable {
         let id: UUID
         var name: String
         var details: String

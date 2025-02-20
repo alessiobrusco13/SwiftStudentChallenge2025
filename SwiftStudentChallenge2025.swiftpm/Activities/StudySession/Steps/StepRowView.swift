@@ -7,28 +7,56 @@
 
 import SwiftUI
 
-// When i tap on the text it turns into a textfield
+// – [X] When i tap on the text it turns into a textfield
 
 struct StepRowView: View {
     @Binding var step: StudySession.Step
     @Binding var selection: StudySession.Step?
+    
+    @State private var tappedName = false
+    @FocusState private var nameFieldFocused: Bool
+    
+    @State private var graphicCompletedState: Bool
     
     var isSelected: Bool {
         guard let selection else { return false }
         return selection.id == step.id
     }
     
+    var completedButtonDisabled: Bool {
+        if selection != nil {
+            guard isSelected else { return true }
+        }
+        
+        return false
+    }
+    
+    init(step: Binding<StudySession.Step>, selection: Binding<StudySession.Step?>) {
+        _step = step
+        _selection = selection
+        _graphicCompletedState = State(initialValue: step.completed.wrappedValue)
+    }
+    
     var body: some View {
         HStack(alignment: .top) {
             Button {
-                withAnimation {
-                    step.completed.toggle()
+                Task { @MainActor in
+                    withAnimation {
+                        graphicCompletedState.toggle()
+                        selection = nil
+                    }
+                    
+                    try? await Task.sleep(for: .seconds(0.5))
+                    
+                    withAnimation {
+                        step.completed = graphicCompletedState
+                    }
                 }
             } label: {
                 RoundedRectangle(cornerRadius: 6)
                     .stroke(.secondary, lineWidth: 2)
                     .overlay {
-                        if step.completed {
+                        if graphicCompletedState {
                             Image(systemName: "checkmark")
                                 .fontWeight(.heavy)
                                 .foregroundStyle(.white)
@@ -38,42 +66,49 @@ struct StepRowView: View {
             }
             .buttonStyle(.pressable)
             .frame(width: 20, height: 20)
-            .padding(.top, isSelected ? 3 : 0)
+            .disabled(completedButtonDisabled)
+            .padding(.top, isSelected ? 4 : 0)
             
             VStack(alignment: .leading, spacing: 5) {
-                Button {
-                    selection = step
-                } label: {
-                    HStack {
+                HStack {
+                    if !tappedName {
                         Text(step.name)
                             .font(isSelected ? .title2 : .body)
                             .bold()
-                        
-                        if !step.details.isEmpty {
-                            Image(systemName: "text.justify.left")
-                                .bold()
-                        }
+                            .padding(.vertical, isSelected ? 1 : 0)
+                    } else {
+                        TextField("Step name", text: $step.name)
+                            .font(isSelected ? .title2 : .body)
+                            .bold()
+                            .focused($nameFieldFocused)
+                    }
+                    
+                    if !step.details.isEmpty && !tappedName {
+                        Image(systemName: "text.justify.left")
+                            .bold()
                     }
                 }
-                .disabled(step.details.isEmpty || isSelected)
-                .buttonStyle(.passthrough)
+                .contentShape(.rect)
+                .onTapGesture {
+                    if !isSelected {
+                        selection = step
+                    } else {
+                        tappedName = true
+                        nameFieldFocused = true
+                    }
+                }
                 
                 if isSelected {
-                    Text(step.details)
+                    TextField("Details…", text: $step.details, axis: .vertical)
                         .foregroundStyle(.secondary)
                 }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background {
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.prominentGlass.opacity(isSelected ? 1 : 0))
-                .onTapGesture {
-                    // To make it so that in the 'StepsView', when you tap on the background it doesn't deselect.
-                }
+        .onChange(of: isSelected) {
+            guard !isSelected else { return }
+            tappedName = false
         }
-        .padding(.horizontal)
     }
 }
 
@@ -82,7 +117,7 @@ struct StepRowView: View {
     @Previewable @State var selection: StudySession.Step? = nil
     
     ZStack {
-        Color.blue
+        Color.green
             .ignoresSafeArea()
         
         Button {

@@ -79,7 +79,7 @@ struct HomeView: View {
                                 .font(.title3)
                         }
                         .buttonBorderShape(.circle)
-                        .buttonStyle(.glassProminent)
+                        .buttonStyle(.prominentGlass)
                         
                         Button {
                             

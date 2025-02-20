@@ -1,5 +1,5 @@
 //
-//  GlassProminentButtonStyle.swift
+//  ProminentGlassButtonStyle.swift
 //  SwiftStudentChallenge2025
 //
 //  Created by Alessio Garzia Marotta Brusco on 10/02/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GlassProminentButtonStyle: ButtonStyle {
+struct ProminentGlassButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding(8)
@@ -18,8 +18,8 @@ struct GlassProminentButtonStyle: ButtonStyle {
     }
 }
 
-extension ButtonStyle where Self == GlassProminentButtonStyle {
-    static var glassProminent: Self { .init() }
+extension ButtonStyle where Self == ProminentGlassButtonStyle {
+    static var prominentGlass: Self { .init() }
 }
 
 #Preview {
@@ -44,6 +44,6 @@ extension ButtonStyle where Self == GlassProminentButtonStyle {
             }
             .buttonBorderShape(.circle)
         }
-        .buttonStyle(.glassProminent)
+        .buttonStyle(.prominentGlass)
     }
 }

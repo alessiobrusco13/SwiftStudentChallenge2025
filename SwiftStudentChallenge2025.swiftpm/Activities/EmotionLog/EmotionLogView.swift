@@ -43,7 +43,7 @@ struct EmotionLogView: View {
                             .font(.largeTitle)
                             .frame(width: 37, height: 37)
                     }
-                    .buttonStyle(.glassProminent)
+                    .buttonStyle(.prominentGlass)
                     .buttonBorderShape(.capsule)
                 }
             }
