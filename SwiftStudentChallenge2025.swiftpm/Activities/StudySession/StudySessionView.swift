@@ -28,11 +28,14 @@ struct StudySessionView: View {
                     .ignoresSafeArea()
                 
                 Rectangle()
-                    .fill(.black.opacity(
-                        (stepSelection != nil) || showingAllSteps
-                        ? 0.2
-                        : 0
-                    ))
+                    .animation(.smooth(duration: 1)) { view in
+                        view
+                            .foregroundStyle(.black.opacity(
+                                (stepSelection != nil) || showingAllSteps
+                                ? 0.2
+                                : 0
+                            ))
+                    }
                     .ignoresSafeArea()
                 
                 ScrollView {
@@ -52,32 +55,37 @@ struct StudySessionView: View {
                 AnimatedBackgroundView()
             }
             .contentShape(.rect)
-            .onTapGesture {
-                guard (stepSelection != nil) || showingAllSteps else {
-                    return
-                }
-                
-                showingAllSteps = false
-                stepSelection = nil
-            }
+            .onTapGesture(perform: deselectSteps)
             .emotionLogger(isPresented: $showingEmotionLogger, session: session)
             .onAppear {
                 currentSessionID = session.id.uuidString
-                
-                Task { @MainActor in
-                    try? await Task.sleep(for: .seconds(0.6))
-                    
-                    withAnimation(.smooth) {
-                        showingEmotionLogger = model.shouldShowEmotionLogger(for: session, context: modelContext)
-                    }
-                }
-            }
-            .sheet(isPresented: $editing) {
-                SessionDebugView(session: session)
+                setupEmotionLogger()
             }
             .onDisappear {
                 stepSelection = nil
                 showingAllSteps = false
+            }
+            .sheet(isPresented: $editing) {
+                SessionDebugView(session: session)
+            }
+        }
+    }
+    
+    func deselectSteps() {
+        guard (stepSelection != nil) || showingAllSteps else {
+            return
+        }
+        
+        showingAllSteps = false
+        stepSelection = nil
+    }
+    
+    func setupEmotionLogger() {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.6))
+            
+            withAnimation(.smooth) {
+                showingEmotionLogger = model.shouldShowEmotionLogger(for: session, context: modelContext)
             }
         }
     }
