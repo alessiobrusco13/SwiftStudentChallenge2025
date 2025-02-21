@@ -76,7 +76,7 @@ struct StepRowView<DeleteButton: View>: View {
         }
     }
     
-    var completeButton: some View {
+    private var completeButton: some View {
         Button {
             Task { @MainActor in
                 withAnimation {
@@ -108,7 +108,7 @@ struct StepRowView<DeleteButton: View>: View {
 
     }
     
-    @ViewBuilder var stepTitle: some View {
+    @ViewBuilder private var stepTitle: some View {
         if !tappedName {
             Text(step.name)
                 .font(isSelected ? .title2 : .body)

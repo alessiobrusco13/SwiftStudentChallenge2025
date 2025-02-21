@@ -42,7 +42,8 @@ struct StudySessionView: View {
                     StepsView(
                         steps: $session.steps,
                         selection: $stepSelection,
-                        showingAllSteps: $showingAllSteps
+                        showingAllSteps: $showingAllSteps,
+                        appearance: session.appearance
                     )
                 }
             }

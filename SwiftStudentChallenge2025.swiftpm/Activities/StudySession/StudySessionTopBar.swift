@@ -25,7 +25,7 @@ struct StudySessionTopBar: View {
             }
             
             .font(.headline)
-            .fontStyling(for: session)
+            .fontStyling(for: session.appearance)
             .multilineTextAlignment(.center)
             .lineLimit(2)
             .frame(maxWidth: 250)

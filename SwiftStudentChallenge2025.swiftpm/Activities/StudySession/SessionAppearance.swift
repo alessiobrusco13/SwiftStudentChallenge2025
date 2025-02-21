@@ -19,10 +19,10 @@ extension StudySession {
 }
 
 fileprivate struct SessionFontStylingModifier: ViewModifier {
-    let session: StudySession
+    let sessionAppearance: StudySession.Appearance
     
     var titleFontDesign: Font.Design {
-        switch session.appearance.titleFont {
+        switch sessionAppearance.titleFont {
         case .rounded: .rounded
         case .serif: .serif
         default: .default
@@ -30,7 +30,7 @@ fileprivate struct SessionFontStylingModifier: ViewModifier {
     }
     
     var titleFontWidth: Font.Width {
-        switch session.appearance.titleFont {
+        switch sessionAppearance.titleFont {
         case .expanded: .expanded
         default: .standard
         }
@@ -44,7 +44,7 @@ fileprivate struct SessionFontStylingModifier: ViewModifier {
 }
 
 extension View {
-    func fontStyling(for session: StudySession) -> some View {
-        modifier(SessionFontStylingModifier(session: session))
+    func fontStyling(for sessionAppearance: StudySession.Appearance) -> some View {
+        modifier(SessionFontStylingModifier(sessionAppearance: sessionAppearance))
     }
 }

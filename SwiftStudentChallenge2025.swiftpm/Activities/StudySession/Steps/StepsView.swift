@@ -11,10 +11,11 @@ struct StepsView: View {
     @Binding var steps: [StudySession.Step]
     @Binding var selection: StudySession.Step?
     @Binding var showingAllSteps: Bool
+    let appearance: StudySession.Appearance
     
     @Namespace private var namespace
     
-    var currentStep: StudySession.Step? {
+    private var currentStep: StudySession.Step? {
         steps.first { $0.completed == false }
     }
     
@@ -51,7 +52,7 @@ struct StepsView: View {
         .animation(.smooth.speed(1.5), value: showingAllSteps)
     }
     
-    @ViewBuilder func stepView(_ step: StudySession.Step, binding: Binding<StudySession.Step>) -> some View {
+    @ViewBuilder private func stepView(_ step: StudySession.Step, binding: Binding<StudySession.Step>) -> some View {
         // Show all steps only when necessary
         if showingAllSteps || currentStep == nil {
             StepRowView(step: binding, selection: $selection, deleteButton: deleteButton)
@@ -66,21 +67,23 @@ struct StepsView: View {
         }
     }
     
-    @ViewBuilder var heading: some View {
-        if showingAllSteps || currentStep == nil {
-            Text("All Steps")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .matchedGeometryEffect(id: "stepHeading", in: namespace)
-                .transition(.blurReplace)
-        } else {
-            Text("Current Step")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .matchedGeometryEffect(id: "stepHeading", in: namespace)
-                .transition(.blurReplace)
+    private var heading: some View {
+        Group {
+            if showingAllSteps || currentStep == nil {
+                Text("All Steps")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .matchedGeometryEffect(id: "stepHeading", in: namespace)
+            } else {
+                Text("Current Step")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .matchedGeometryEffect(id: "stepHeading", in: namespace)
+            }
         }
+        .transition(.blurReplace)
+        .fontStyling(for: appearance)
     }
     
-    func expandButtonLabel() -> some View {
+    private func expandButtonLabel() -> some View {
         Label(
             showingAllSteps ? "Show only current step" : "Show all steps",
             systemImage: showingAllSteps
@@ -92,7 +95,7 @@ struct StepsView: View {
         .bold()
     }
     
-    func deleteButton(for step: StudySession.Step) -> some View {
+    private func deleteButton(for step: StudySession.Step) -> some View {
         Button {
             delete(step)
         } label: {
@@ -104,7 +107,7 @@ struct StepsView: View {
         .matchedGeometryEffect(id: "deleteButton", in: namespace)
     }
     
-    func expandAction() {
+    private func expandAction() {
         Task { @MainActor in
             if showingAllSteps {
                 selection = nil
@@ -118,7 +121,7 @@ struct StepsView: View {
         }
     }
     
-    func delete(_ step: StudySession.Step) {
+    private func delete(_ step: StudySession.Step) {
         guard let index = steps.firstIndex(of: step) else { return }
         
         withAnimation {
@@ -142,7 +145,8 @@ struct StepsView: View {
             StepsView(
                 steps: $session.steps,
                 selection: $selection,
-                showingAllSteps: $showingAllSteps
+                showingAllSteps: $showingAllSteps,
+                appearance: session.appearance
             )
             
             Button("Deselect") {

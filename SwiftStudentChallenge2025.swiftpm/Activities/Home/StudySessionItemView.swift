@@ -13,11 +13,11 @@ struct StudySessionItemView: View {
     let session: StudySession
     let namespace: Namespace.ID
     
-    var itemColor: Color {
+    private var itemColor: Color {
         session.appearance.itemColorRepresentation.color
     }
     
-    var deadlineText: String? {
+    private var deadlineString: String? {
         guard let daysUntilDeadline = Calendar.current.dateComponents([.day], from: .now, to: session.endDate).day else {
             return nil
         }
@@ -44,32 +44,12 @@ struct StudySessionItemView: View {
             .frame(maxWidth: 370)
             .frame(height: 390)
             .matchedTransitionSource(id: session.id, in: namespace)
-            .overlay(alignment: .bottom) {
-                Text(session.title)
-                    .foregroundStyle(.white)
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .fontStyling(for: session)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.glass, in: .capsule)
-                    .padding(20)
-                    .colorScheme(.dark)
-            }
+            .overlay(alignment: .bottom, content: titleView)
             .overlay(alignment: .topTrailing) {
                 if session.completed {
                     icon(for: "checkmark")
-                } else if let deadlineText {
-                    Text(deadlineText)
-                        .foregroundStyle(.white)
-                        .font(.subheadline.bold().smallCaps())
-                        .fontDesign(.rounded)
-                        .padding(12)
-                        .background(.glass, in: .capsule)
-                        .padding(20)
-                        .colorScheme(.dark)
-                    
+                } else if let deadlineString {
+                    deadlineView(deadlineString)
                 }
             }
             .overlay(alignment: .topLeading) {
@@ -80,6 +60,20 @@ struct StudySessionItemView: View {
             .compositingGroup()
     }
     
+    private func titleView() -> some View {
+        Text(session.title)
+            .foregroundStyle(.white)
+            .font(.title3)
+            .fontWeight(.bold)
+            .fontStyling(for: session.appearance)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(.glass, in: .capsule)
+            .padding(20)
+            .colorScheme(.dark)
+    }
+    
     private func icon(for symbol: String) -> some View {
         Image(systemName: symbol)
             .resizable()
@@ -88,6 +82,17 @@ struct StudySessionItemView: View {
             .bold()
             .padding(12)
             .background(.glass, in: .circle)
+            .padding(20)
+            .colorScheme(.dark)
+    }
+    
+    private func deadlineView(_ deadline: String) -> some View {
+        Text(deadline)
+            .foregroundStyle(.white)
+            .font(.subheadline.bold().smallCaps())
+            .fontDesign(.rounded)
+            .padding(12)
+            .background(.glass, in: .capsule)
             .padding(20)
             .colorScheme(.dark)
     }
