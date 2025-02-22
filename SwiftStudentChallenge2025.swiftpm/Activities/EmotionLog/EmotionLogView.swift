@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EmotionLogView: View {
-    let session: StudySession
+    let project: StudyProject
     let dismiss: () -> Void
     
     @Environment(Model.self) private var model
@@ -35,7 +35,7 @@ struct EmotionLogView: View {
                 ForEach(Emotion.allCases, id: \.self) { emotion in
                     Button {
                         withAnimation {
-                            model.log(emotion, for: session, in: modelContext)
+                            model.log(emotion, for: project, in: modelContext)
                             dismiss()
                         }
                     } label: {
@@ -58,7 +58,7 @@ struct EmotionLogView: View {
 }
 
 #Preview {
-    EmotionLogView(session: .example) {
+    EmotionLogView(project: .example) {
         
     }
     .environment(Model.preview)

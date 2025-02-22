@@ -1,5 +1,5 @@
 //
-//  SessionAppearance.swift
+//  ProjectAppearance.swift
 //  SwiftStudentChallenge2025
 //
 //  Created by Alessio Garzia Marotta Brusco on 10/02/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension StudySession {
+extension StudyProject {
     struct Appearance: Codable {
         enum TitleFont: Codable, CaseIterable {
             case regular, rounded, serif, expanded
@@ -18,11 +18,11 @@ extension StudySession {
     }
 }
 
-fileprivate struct SessionFontStylingModifier: ViewModifier {
-    let sessionAppearance: StudySession.Appearance
+fileprivate struct ProjectFontStylingModifier: ViewModifier {
+    let projectAppearance: StudyProject.Appearance
     
     var titleFontDesign: Font.Design {
-        switch sessionAppearance.titleFont {
+        switch projectAppearance.titleFont {
         case .rounded: .rounded
         case .serif: .serif
         default: .default
@@ -30,7 +30,7 @@ fileprivate struct SessionFontStylingModifier: ViewModifier {
     }
     
     var titleFontWidth: Font.Width {
-        switch sessionAppearance.titleFont {
+        switch projectAppearance.titleFont {
         case .expanded: .expanded
         default: .standard
         }
@@ -44,7 +44,7 @@ fileprivate struct SessionFontStylingModifier: ViewModifier {
 }
 
 extension View {
-    func fontStyling(for sessionAppearance: StudySession.Appearance) -> some View {
-        modifier(SessionFontStylingModifier(sessionAppearance: sessionAppearance))
+    func fontStyling(for projectAppearance: StudyProject.Appearance) -> some View {
+        modifier(ProjectFontStylingModifier(projectAppearance: projectAppearance))
     }
 }

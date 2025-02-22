@@ -1,5 +1,5 @@
 //
-//  StudySessionTopBar.swift
+//  StudyProjectTopBar.swift
 //  SwiftStudentChallenge2025
 //
 //  Created by Alessio Garzia Marotta Brusco on 19/02/25.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct StudySessionTopBar: View {
-    let session: StudySession
+struct StudyProjectTopBar: View {
+    let project: StudyProject
     @Binding var editing: Bool
     
     @Environment(\.dismiss) private var dismiss
@@ -16,16 +16,16 @@ struct StudySessionTopBar: View {
     var body: some View {
         Group {
             HStack(spacing: 5) {
-                if let symbol = session.symbol?.rawValue {
+                if let symbol = project.symbol?.rawValue {
                     
                     Image(systemName: symbol)
                 }
                 
-                Text(session.title)
+                Text(project.title)
             }
             
             .font(.headline)
-            .fontStyling(for: session.appearance)
+            .fontStyling(for: project.appearance)
             .multilineTextAlignment(.center)
             .lineLimit(2)
             .frame(maxWidth: 250)
@@ -46,7 +46,7 @@ struct StudySessionTopBar: View {
                 Button {
                     editing = true
                 } label: {
-                    Label("Edit Session", systemImage: "slider.horizontal.3")
+                    Label("Edit Project", systemImage: "slider.horizontal.3")
                         .font(.title3)
                         .fontWeight(.bold)
                         .labelStyle(.iconOnly)

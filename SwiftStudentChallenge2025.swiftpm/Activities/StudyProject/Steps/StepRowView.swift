@@ -10,9 +10,9 @@ import SwiftUI
 // – [X] When i tap on the text it turns into a textfield
 
 struct StepRowView<DeleteButton: View>: View {
-    @Binding var step: StudySession.Step
-    @Binding var selection: StudySession.Step?
-    let deleteButton: (StudySession.Step) -> DeleteButton
+    @Binding var step: StudyProject.Step
+    @Binding var selection: StudyProject.Step?
+    let deleteButton: (StudyProject.Step) -> DeleteButton
     
     @State private var tappedName = false
     @State private var graphicCompletedState: Bool
@@ -24,9 +24,9 @@ struct StepRowView<DeleteButton: View>: View {
     }
     
     init(
-        step: Binding<StudySession.Step>,
-        selection: Binding<StudySession.Step?>,
-        @ViewBuilder deleteButton: @escaping (_ step: StudySession.Step) -> DeleteButton
+        step: Binding<StudyProject.Step>,
+        selection: Binding<StudyProject.Step?>,
+        @ViewBuilder deleteButton: @escaping (_ step: StudyProject.Step) -> DeleteButton
     ) {
         _step = step
         _selection = selection
@@ -47,6 +47,7 @@ struct StepRowView<DeleteButton: View>: View {
                             .bold()
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(.rect)
                 .onTapGesture {
                     if !isSelected {
@@ -115,7 +116,6 @@ struct StepRowView<DeleteButton: View>: View {
                 .font(isSelected ? .title2 : .body)
                 .bold()
                 .padding(.vertical, isSelected ? 1 : 0)
-                
         } else {
             TextField("Step name", text: $step.name)
                 .font(isSelected ? .title2 : .body)
@@ -126,8 +126,8 @@ struct StepRowView<DeleteButton: View>: View {
 }
 
 #Preview {
-    @Previewable @State var step = StudySession.Step.example
-    @Previewable @State var selection: StudySession.Step? = nil
+    @Previewable @State var step = StudyProject.Step.example
+    @Previewable @State var selection: StudyProject.Step? = nil
     
     ZStack {
         Color.green

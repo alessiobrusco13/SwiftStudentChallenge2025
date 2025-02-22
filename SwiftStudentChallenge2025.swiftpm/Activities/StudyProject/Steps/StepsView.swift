@@ -9,14 +9,14 @@ import SwiftUI
 
 // Add a button to add steps. It adds an empty one, then it selects it and focuses it.
 struct StepsView: View {
-    @Binding var steps: [StudySession.Step]
-    @Binding var selection: StudySession.Step?
+    @Binding var steps: [StudyProject.Step]
+    @Binding var selection: StudyProject.Step?
     @Binding var showingAllSteps: Bool
-    let appearance: StudySession.Appearance
+    let appearance: StudyProject.Appearance
     
     @Namespace private var namespace
     
-    private var currentStep: StudySession.Step? {
+    private var currentStep: StudyProject.Step? {
         steps.first { $0.completed == false }
     }
     
@@ -57,7 +57,7 @@ struct StepsView: View {
         .animation(.smooth.speed(1.5), value: showingAllSteps)
     }
     
-    @ViewBuilder private func stepView(_ step: StudySession.Step, binding: Binding<StudySession.Step>) -> some View {
+    @ViewBuilder private func stepView(_ step: StudyProject.Step, binding: Binding<StudyProject.Step>) -> some View {
         // Show all steps only when necessary
         if showingAllSteps || currentStep == nil {
             StepRowView(step: binding, selection: $selection, deleteButton: deleteButton)
@@ -100,7 +100,7 @@ struct StepsView: View {
         .bold()
     }
     
-    private func deleteButton(for step: StudySession.Step) -> some View {
+    private func deleteButton(for step: StudyProject.Step) -> some View {
         Button {
             delete(step)
         } label: {
@@ -126,7 +126,7 @@ struct StepsView: View {
         }
     }
     
-    private func delete(_ step: StudySession.Step) {
+    private func delete(_ step: StudyProject.Step) {
         guard let index = steps.firstIndex(of: step) else { return }
         
         withAnimation {
@@ -137,8 +137,8 @@ struct StepsView: View {
 }
 
 #Preview {
-    @Previewable @State var session = StudySession.example
-    @Previewable @State var selection: StudySession.Step?
+    @Previewable @State var project = StudyProject.example
+    @Previewable @State var selection: StudyProject.Step?
     @Previewable @State var showingAllSteps = false
     
     ZStack {
@@ -148,10 +148,10 @@ struct StepsView: View {
         
         ScrollView {
             StepsView(
-                steps: $session.steps,
+                steps: $project.steps,
                 selection: $selection,
                 showingAllSteps: $showingAllSteps,
-                appearance: session.appearance
+                appearance: project.appearance
             )
             
             Button("Deselect") {

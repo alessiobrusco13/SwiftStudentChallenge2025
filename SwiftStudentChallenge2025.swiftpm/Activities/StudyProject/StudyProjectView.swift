@@ -1,5 +1,5 @@
 //
-//  StudySessionView.swift
+//  StudyProjectView.swift
 //  SwiftStudentChallenge2025
 //
 //  Created by Alessio Garzia Marotta Brusco on 13/02/25.
@@ -7,68 +7,63 @@
 
 import SwiftUI
 
-struct StudySessionView: View {
-    @Bindable var session: StudySession
+struct StudyProjectView: View {
+    @Bindable var project: StudyProject
     
     @Environment(Model.self) private var model
     @Environment(\.modelContext) private var modelContext
     
-    @AppStorage(Model.currentSessionIDKey) private var currentSessionID: String?
+    @AppStorage(Model.currentProjectIDKey) private var currentProjectID: String?
     
     @State private var editing = false
     @State private var showingEmotionLogger = false
     
-    @State private var stepSelection: StudySession.Step?
+    @State private var stepSelection: StudyProject.Step?
     @State private var showingAllSteps = false
     
-    @State private var startSessionViewExpanded = false
+    @State private var startProjectViewExpanded = false
     
     var body: some View {
         NavigationStack {
             ZStack {
                 Rectangle()
-                    .fill(session.appearance.itemColorRepresentation.color.gradient.opacity(0.4))
+                    .fill(project.appearance.itemColorRepresentation.color.gradient.opacity(0.4))
                     .ignoresSafeArea()
                 
-                
-                // Dims the screen when a step is selected.
-                Rectangle()
-                    .animation(.smooth(duration: 1)) { view in
-                        view
-                            .foregroundStyle(.black.opacity(
-                                (stepSelection != nil) || showingAllSteps
-                                ? 0.4
-                                : 0
-                            ))
-                    }
-                    .ignoresSafeArea()
+                allStepSelectionBackground
                 
                 ScrollView {
                     StepsView(
-                        steps: $session.steps,
+                        steps: $project.steps,
                         selection: $stepSelection,
                         showingAllSteps: $showingAllSteps,
-                        appearance: session.appearance
+                        appearance: project.appearance
                     )
                 }
             }
             .topBar(behavior: .alwaysMinimized) { _ in
-                StudySessionTopBar(session: session, editing: $editing)
+                StudyProjectTopBar(project: project, editing: $editing)
             }
             .toolbarVisibility(.hidden)
             .overlay {
                 Rectangle()
-                    .fill(.black.opacity(startSessionViewExpanded ? 0.4 : 0))
+                    .fill(.black.opacity(startProjectViewExpanded ? 0.4 : 0))
                     .ignoresSafeArea()
                     .onTapGesture {
                         withAnimation {
-                            startSessionViewExpanded = false
+                            startProjectViewExpanded = false
                         }
                     }
             }
             .safeAreaInset(edge: .bottom) {
                 // This maybe adds opacity to the background. It dims everything but the timer. On tap everything gets back to normal for little time
-                StartSessionView(isExpanded: $startSessionViewExpanded)
+                StartProjectView(
+                    isExpanded: $startProjectViewExpanded,
+                    appearance: project.appearance
+                ) {
+                    stepSelection = nil
+                }
+                .disabled(stepSelection != nil || showingAllSteps)
             }
             .presentationBackground {
                 // Not the best implementation
@@ -76,9 +71,9 @@ struct StudySessionView: View {
             }
             .contentShape(.rect)
             .onTapGesture(perform: deselectSteps)
-//            .emotionLogger(isPresented: $showingEmotionLogger, session: session)
+            //            .emotionLogger(isPresented: $showingEmotionLogger, project: project)
             .onAppear {
-                currentSessionID = session.id.uuidString
+                currentProjectID = project.id.uuidString
                 setupEmotionLogger()
             }
             .onDisappear {
@@ -86,10 +81,24 @@ struct StudySessionView: View {
                 showingAllSteps = false
             }
             .sheet(isPresented: $editing) {
-                SessionDebugView(session: session)
+                ProjectDebugView(project: project)
             }
-            .interactiveDismissDisabled(startSessionViewExpanded)
+            .interactiveDismissDisabled(startProjectViewExpanded)
         }
+    }
+    
+    var allStepSelectionBackground: some View {
+        // Dims the screen when a step is selected.
+        Rectangle()
+            .animation(.smooth(duration: 1)) { view in
+                view
+                    .foregroundStyle(.black.opacity(
+                        (stepSelection != nil) || showingAllSteps
+                        ? 0.4
+                        : 0
+                    ))
+            }
+            .ignoresSafeArea()
     }
     
     func deselectSteps() {
@@ -106,7 +115,7 @@ struct StudySessionView: View {
             try? await Task.sleep(for: .seconds(0.6))
             
             withAnimation(.smooth) {
-                showingEmotionLogger = model.shouldShowEmotionLogger(for: session, context: modelContext)
+                showingEmotionLogger = model.shouldShowEmotionLogger(for: project, context: modelContext)
             }
         }
     }

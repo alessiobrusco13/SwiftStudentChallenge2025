@@ -9,39 +9,39 @@ import SwiftData
 import SwiftUI
 
 // – [] Scroll lag when showing welcome message.
-// – [] Show 'current' session.
+// – [] Show 'current' project.
 
 struct HomeView: View {
     @State private var topBarMinimized = false
-    @State private var selection: StudySession?
+    @State private var selection: StudyProject?
     @Namespace private var namespace
     
-    @Query(filter: HomeView.activeSessionsFilter, sort: \.endDate) private var activeSessions: [StudySession]
-    @Query(filter: HomeView.completedSessionsFilter, sort: \.startDate) private var completedSessions: [StudySession]
+    @Query(filter: HomeView.activeProjectsFilter, sort: \.endDate) private var activeProjects: [StudyProject]
+    @Query(filter: HomeView.completedProjectsFilter, sort: \.startDate) private var completedProjects: [StudyProject]
     
-    static let activeSessionsFilter = #Predicate<StudySession> { $0.completed == false }
-    static let completedSessionsFilter = #Predicate<StudySession> { $0.completed }
+    static let activeProjectsFilter = #Predicate<StudyProject> { $0.completed == false }
+    static let completedProjectsFilter = #Predicate<StudyProject> { $0.completed }
     
-    @AppStorage(Model.currentSessionIDKey) private var currentSessionID: String?
+    @AppStorage(Model.currentProjectIDKey) private var currentProjectID: String?
     
-    var currentSession: StudySession? {
+    var currentProject: StudyProject? {
         guard
-            let currentSessionID,
-            let uuid = UUID(uuidString: currentSessionID),
-            let session = activeSessions.first(where: { $0.id == uuid })
+            let currentProjectID,
+            let uuid = UUID(uuidString: currentProjectID),
+            let project = activeProjects.first(where: { $0.id == uuid })
         else {
             return nil
         }
         
-        return session
+        return project
     }
     
-    var otherActiveSessions: [StudySession] {
-        guard let currentSession else {
-            return activeSessions
+    var otherActiveProjects: [StudyProject] {
+        guard let currentProject else {
+            return activeProjects
         }
         
-        return activeSessions.filter { $0.id != currentSession.id }
+        return activeProjects.filter { $0.id != currentProject.id }
     }
     
     var body: some View {
@@ -52,15 +52,15 @@ struct HomeView: View {
                 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 15) {
-                        //                        if let currentSession {
-                        //                            StudySessionItemView(session: currentSession)
+                        //                        if let currentProject {
+                        //                            StudyProjectItemView(project: currentProject)
                         //                        }
                         
-                        ForEach(activeSessions + completedSessions) { session in
+                        ForEach(activeProjects + completedProjects) { project in
                             Button {
-                                selection = session
+                                selection = project
                             } label: {
-                                StudySessionItemView(session: session, namespace: namespace)
+                                StudyProjectItemView(project: project, namespace: namespace)
                                     .shadow(color: .black.opacity(0.1), radius: 10)
                             }
                             .buttonStyle(.pressable)
@@ -94,10 +94,10 @@ struct HomeView: View {
                 }
             }
         }
-        .animation(.default, value: otherActiveSessions + completedSessions)
-        .fullScreenCover(item: $selection) { session in
-            StudySessionView(session: session)
-                .navigationTransition(.zoom(sourceID: session.id, in: namespace))
+        .animation(.default, value: otherActiveProjects + completedProjects)
+        .fullScreenCover(item: $selection) { project in
+            StudyProjectView(project: project)
+                .navigationTransition(.zoom(sourceID: project.id, in: namespace))
         }
     }
 }

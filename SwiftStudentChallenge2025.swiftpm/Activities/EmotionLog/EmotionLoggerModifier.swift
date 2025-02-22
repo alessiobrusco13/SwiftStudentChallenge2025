@@ -9,14 +9,14 @@ import SwiftUI
 
 struct EmotionLoggerModifier: ViewModifier {
     @Binding var isPresented: Bool
-    let session: StudySession
+    let project: StudyProject
     
     func body(content: Content) -> some View {
         content
             .animation(.smooth, value: isPresented)
             .overlay {
                 if isPresented {
-                    EmotionLogView(session: session) {
+                    EmotionLogView(project: project) {
                         isPresented = false
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -35,7 +35,7 @@ struct EmotionLoggerModifier: ViewModifier {
 }
 
 extension View {
-    func emotionLogger(isPresented: Binding<Bool>, session: StudySession) -> some View {
-        modifier(EmotionLoggerModifier(isPresented: isPresented, session: session))
+    func emotionLogger(isPresented: Binding<Bool>, project: StudyProject) -> some View {
+        modifier(EmotionLoggerModifier(isPresented: isPresented, project: project))
     }
 }

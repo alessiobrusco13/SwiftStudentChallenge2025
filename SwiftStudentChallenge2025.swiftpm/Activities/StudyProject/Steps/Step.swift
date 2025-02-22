@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension StudySession {
+extension StudyProject {
     struct Step: Codable, Identifiable, Equatable {
         let id: UUID
         var name: String

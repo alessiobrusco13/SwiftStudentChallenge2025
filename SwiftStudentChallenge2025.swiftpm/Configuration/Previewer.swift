@@ -70,9 +70,9 @@ struct Previewer<Content: View>: View {
 }
 
 #Preview {
-    Previewer(for: StudySession.self) {
-        Text(StudySession.example.title)
+    Previewer(for: StudyProject.self) {
+        Text(StudyProject.example.title)
     } contextHandler: { context in
-        context.insert(StudySession.example)
+        context.insert(StudyProject.example)
     }
 }

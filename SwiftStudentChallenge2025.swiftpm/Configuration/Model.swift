@@ -17,7 +17,7 @@ final class Model {
     var shouldShowWelcomeScreen = true
     
     static let hasOnboardedKey = "hasOnboarded"
-    static let currentSessionIDKey = "currentSessionID"
+    static let currentProjectIDKey = "currentProjectID"
     
     static let preview = {
         let model = Model(inMemory: true)
@@ -33,49 +33,49 @@ final class Model {
     
     init(inMemory: Bool = false) {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: inMemory)
-        let container = try! ModelContainer(for: StudySession.self, configurations: configuration)
+        let container = try! ModelContainer(for: StudyProject.self, configurations: configuration)
         
         self.container = container
         self.modelContext = container.mainContext
     }
     
     func generateSampleData() throws {
-        let configureSession: (StudySession) -> Void = {
+        let configureProject: (StudyProject) -> Void = {
             $0.steps = (0..<5).map {
-                StudySession.Step(name: "Step \($0)", details: "Read chapter \($0+1)")
+                StudyProject.Step(name: "Step \($0)", details: "Read chapter \($0+1)")
             }
             
-            $0.symbol = StudySession.Symbol.allCases.randomElement()!
+            $0.symbol = StudyProject.Symbol.allCases.randomElement()!
             $0.appearance.itemColorRepresentation = .random()
-            $0.appearance.titleFont = StudySession.Appearance.TitleFont.allCases.randomElement()!
+            $0.appearance.titleFont = StudyProject.Appearance.TitleFont.allCases.randomElement()!
         }
         
         for i in 0..<3 {
-            let session = StudySession(
-                title: "Test Session \(i)",
+            let project = StudyProject(
+                title: "Test Project \(i)",
                 endDate: Calendar.current.date(byAdding: .day, value: 4 + i, to: .now) ?? .now
             )
             
-            configureSession(session)
-            modelContext.insert(session)
+            configureProject(project)
+            modelContext.insert(project)
         }
         
         for i in 0..<3 {
-            let session = StudySession(
-                title: "Completed Session \(i)",
+            let project = StudyProject(
+                title: "Completed Project \(i)",
                 endDate: Calendar.current.date(byAdding: .day, value: -10 - i, to: .now) ?? .now
             )
             
-            session.completed = true
-            configureSession(session)
-            modelContext.insert(session)
+            project.completed = true
+            configureProject(project)
+            modelContext.insert(project)
         }
         
         try modelContext.save()
     }
     
-    func lastEmotionLog(for session: StudySession) -> EmotionLog? {
-        session.emotionLogs.sorted { $0.date < $1.date }.last
+    func lastEmotionLog(for project: StudyProject) -> EmotionLog? {
+        project.emotionLogs.sorted { $0.date < $1.date }.last
     }
     
     func lastEmotionLog(in context: ModelContext) -> EmotionLog? {
@@ -90,20 +90,20 @@ final class Model {
         }
     }
     
-    func shouldShowEmotionLogger(for session: StudySession, context: ModelContext) -> Bool {
+    func shouldShowEmotionLogger(for project: StudyProject, context: ModelContext) -> Bool {
         if let lastLog = lastEmotionLog(in: modelContext), (Date.now.timeIntervalSince1970 - lastLog.date.timeIntervalSince1970) < 30*60 {
             return false
-        } else if let lastSessionLog = lastEmotionLog(for: session), (Date.now.timeIntervalSince1970 - lastSessionLog.date.timeIntervalSince1970) < 4*60*60 {
+        } else if let lastProjectLog = lastEmotionLog(for: project), (Date.now.timeIntervalSince1970 - lastProjectLog.date.timeIntervalSince1970) < 4*60*60 {
             return false
         } else {
             return true
         }
     }
     
-    func log(_ emotion: Emotion, for session: StudySession, in modelContext: ModelContext) {
+    func log(_ emotion: Emotion, for project: StudyProject, in modelContext: ModelContext) {
         let log = EmotionLog(emotion: emotion)
         modelContext.insert(log)
-        session.emotionLogs.append(log)
+        project.emotionLogs.append(log)
     }
 }
 

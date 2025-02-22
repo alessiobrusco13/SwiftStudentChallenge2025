@@ -1,5 +1,5 @@
 //
-//  StudySessionItemView.swift
+//  StudyProjectItemView.swift
 //  SwiftStudentChallenge2025
 //
 //  Created by Alessio Garzia Marotta Brusco on 10/02/25.
@@ -9,16 +9,16 @@ import SwiftUI
 
 // [X] Show deadline but only when it is close enough to the present day, otherwise it might case further procrastination. [Paper](https://typeset.io/papers/on-the-interaction-of-memory-and-procrastination-4kckmuyj2u)
 
-struct StudySessionItemView: View {
-    let session: StudySession
+struct StudyProjectItemView: View {
+    let project: StudyProject
     let namespace: Namespace.ID
     
     private var itemColor: Color {
-        session.appearance.itemColorRepresentation.color
+        project.appearance.itemColorRepresentation.color
     }
     
     private var deadlineString: String? {
-        guard let daysUntilDeadline = Calendar.current.dateComponents([.day], from: .now, to: session.endDate).day else {
+        guard let daysUntilDeadline = Calendar.current.dateComponents([.day], from: .now, to: project.endDate).day else {
             return nil
         }
         
@@ -43,17 +43,17 @@ struct StudySessionItemView: View {
             .fill(itemColor.gradient.opacity(0.6))
             .frame(maxWidth: 370)
             .frame(height: 390)
-            .matchedTransitionSource(id: session.id, in: namespace)
+            .matchedTransitionSource(id: project.id, in: namespace)
             .overlay(alignment: .bottom, content: titleView)
             .overlay(alignment: .topTrailing) {
-                if session.completed {
+                if project.completed {
                     icon(for: "checkmark")
                 } else if let deadlineString {
                     deadlineView(deadlineString)
                 }
             }
             .overlay(alignment: .topLeading) {
-                if let symbol = session.symbol {
+                if let symbol = project.symbol {
                     icon(for: symbol.rawValue)
                 }
             }
@@ -61,11 +61,11 @@ struct StudySessionItemView: View {
     }
     
     private func titleView() -> some View {
-        Text(session.title)
+        Text(project.title)
             .foregroundStyle(.white)
             .font(.title3)
             .fontWeight(.bold)
-            .fontStyling(for: session.appearance)
+            .fontStyling(for: project.appearance)
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)
             .padding()
@@ -101,10 +101,10 @@ struct StudySessionItemView: View {
 #Preview {
     @Previewable @Namespace var namespace
     
-    Previewer(for: StudySession.self) {
-        StudySessionItemView(session: .example, namespace: namespace)
+    Previewer(for: StudyProject.self) {
+        StudyProjectItemView(project: .example, namespace: namespace)
     } contextHandler: { context in
-        context.insert(StudySession.example)
+        context.insert(StudyProject.example)
     }
     .preferredColorScheme(.dark)
 }

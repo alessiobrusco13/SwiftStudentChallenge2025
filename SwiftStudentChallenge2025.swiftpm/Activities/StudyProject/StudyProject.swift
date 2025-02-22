@@ -1,5 +1,5 @@
 //
-//  StudySession.swift
+//  StudyProject.swift
 //  SwiftStudentChallenge2025
 //
 //  Created by Alessio Garzia Marotta Brusco on 07/02/25.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class StudySession: Identifiable {
+final class StudyProject: Identifiable {
     enum Symbol: String, Codable, CaseIterable {
         case book = "book.pages.fill"
         case pencil = "pencil.and.outline"
@@ -46,7 +46,7 @@ final class StudySession: Identifiable {
     var symbol: Symbol?
     var appearance: Appearance
     
-    @Relationship(deleteRule: .cascade, inverse: \EmotionLog.session) var emotionLogs = [EmotionLog]()
+    @Relationship(deleteRule: .cascade, inverse: \EmotionLog.project) var emotionLogs = [EmotionLog]()
     
     init(
         title: String,
@@ -70,16 +70,16 @@ final class StudySession: Identifiable {
     }
     
     @MainActor static let example = {
-        let session = StudySession(
+        let project = StudyProject(
             title: "Newtonian mechanics exam",
             appearance: Appearance(titleFont: .serif),
             endDate: .now.addingTimeInterval(2*24*60*60)
         )
         
-        session.steps = (0..<5).map {
+        project.steps = (0..<5).map {
             Step(name: "Step \($0)", details: "This is an amazing example step. You should be very careful and execute everything. Do things one at a time to ensure you understand everything and don't feel anxious.")
         }
         
-        return session
+        return project
     }()
 }

@@ -5,14 +5,14 @@ import SwiftUI
 // – [] Essays
 
 // – [] Fix background view (use a timeline view)
-// – [] Session Creation (Ask 'what are you doing this for?' 'Other times this has gone through' etc)
-// – [] iPad optimization (what to show alongside the sessions)
+// – [] Project Creation (Ask 'what are you doing this for?' 'Other times this has gone through' etc)
+// – [] iPad optimization (what to show alongside the projects)
 // – [] Onboarding
 // ? [] VoiceOver
 
 // – [] Consider removing Today Title and having a different way of showing time
     
-// – [] Inside Session view
+// – [] Inside Project view
 //  – [X] solo la prossima task + modo per vedere le altre
 //  – [] perché stai studiando questa roba? (motivazionale)
 //  – [] pulsante per iniziare e smettere di lockarsi
