@@ -12,15 +12,15 @@ extension StudyProject {
         let id: UUID
         var name: String
         var details: String
-        var completed: Bool
+        var isCompleted: Bool
         
         static let example = Step(name: "Fluid Dynamics", details: "'Fisica Generale 1' by Giorgio Rosati. Pages 44-75.")
         
-        init(name: String, details: String = "", completed: Bool = false) {
+        init(name: String, details: String = "", isCompleted: Bool = false) {
             id = UUID()
             self.name = name
             self.details = details
-            self.completed = completed
+            self.isCompleted = isCompleted
         }
     }
 }

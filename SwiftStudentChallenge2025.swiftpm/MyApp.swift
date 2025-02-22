@@ -15,7 +15,7 @@ import SwiftUI
 // – [] Inside Project view
 //  – [X] solo la prossima task + modo per vedere le altre
 //  – [] perché stai studiando questa roba? (motivazionale)
-//  – [] pulsante per iniziare e smettere di lockarsi
+//  – [X] pulsante per iniziare e smettere di lockarsi
 //  – [] ricordare di fare pause
 //  – [] resoconto mood nel mentre
 //  – [] invitare a pensare al perché delle cose (perché sto per procrastinare) magari quando si clicca il pulsante per fermarsi

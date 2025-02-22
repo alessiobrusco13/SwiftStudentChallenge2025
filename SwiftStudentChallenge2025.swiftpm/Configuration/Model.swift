@@ -66,7 +66,7 @@ final class Model {
                 endDate: Calendar.current.date(byAdding: .day, value: -10 - i, to: .now) ?? .now
             )
             
-            project.completed = true
+            project.isCompleted = true
             configureProject(project)
             modelContext.insert(project)
         }

@@ -36,7 +36,7 @@ final class StudyProject: Identifiable {
     
     var title: String
     var details: String
-    var completed: Bool
+    var isCompleted: Bool
     var steps: [Step]
     
     var startDate: Date
@@ -51,7 +51,7 @@ final class StudyProject: Identifiable {
     init(
         title: String,
         details: String = "",
-        completed: Bool = false,
+        isCompleted: Bool = false,
         appearance: Appearance = Appearance(),
         symbol: Symbol = .book,
         startDate: Date = .now,
@@ -62,7 +62,7 @@ final class StudyProject: Identifiable {
         
         self.title = title
         self.details = details
-        self.completed = completed
+        self.isCompleted = isCompleted
         self.appearance = appearance
         self.symbol = symbol
         self.startDate = startDate

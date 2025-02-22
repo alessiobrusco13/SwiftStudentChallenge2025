@@ -12,15 +12,14 @@ import SwiftUI
 // – [] Show 'current' project.
 
 struct HomeView: View {
-    @State private var topBarMinimized = false
     @State private var selection: StudyProject?
     @Namespace private var namespace
     
     @Query(filter: HomeView.activeProjectsFilter, sort: \.endDate) private var activeProjects: [StudyProject]
     @Query(filter: HomeView.completedProjectsFilter, sort: \.startDate) private var completedProjects: [StudyProject]
     
-    static let activeProjectsFilter = #Predicate<StudyProject> { $0.completed == false }
-    static let completedProjectsFilter = #Predicate<StudyProject> { $0.completed }
+    static let activeProjectsFilter = #Predicate<StudyProject> { $0.isCompleted == false }
+    static let completedProjectsFilter = #Predicate<StudyProject> { $0.isCompleted }
     
     @AppStorage(Model.currentProjectIDKey) private var currentProjectID: String?
     
@@ -70,8 +69,8 @@ struct HomeView: View {
                 }
                 .toolbarVisibility(.hidden, for: .navigationBar)
                 .frame(maxWidth: .infinity)
-                .topBar { minimized in
-                    HomeTopBar(minimized: minimized) {
+                .topBar { isMinimized in
+                    HomeTopBar(isMinimized: isMinimized) {
                         Button {
                         } label: {
                             Image(systemName: "plus")

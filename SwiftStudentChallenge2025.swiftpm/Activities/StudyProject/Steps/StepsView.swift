@@ -17,7 +17,7 @@ struct StepsView: View {
     @Namespace private var namespace
     
     private var currentStep: StudyProject.Step? {
-        steps.first { $0.completed == false }
+        steps.first { $0.isCompleted == false }
     }
     
     var body: some View {

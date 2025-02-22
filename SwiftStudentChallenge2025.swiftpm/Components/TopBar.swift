@@ -12,49 +12,49 @@ enum TopBarBehavior {
 }
 
 fileprivate struct TopBar<Content: View>: View {
-    @Binding var minimized: Bool
+    @Binding var isMinimized: Bool
     @ViewBuilder let content: (Bool) -> Content
     
     @Environment(\.locale) private var locale
     
     var body: some View {
         HStack {
-            content(minimized)
+            content(isMinimized)
         }
         .padding(.horizontal)
-        .padding(.vertical, minimized ? 4 : 10)
+        .padding(.vertical, isMinimized ? 4 : 10)
         .frame(maxWidth: .infinity)
         .background {
             ProgressiveBlur()
                 .padding(.top, -100)
                 .ignoresSafeArea()
         }
-        .animation(.default, value: minimized)
+        .animation(.default, value: isMinimized)
     }
 }
 
 fileprivate struct TopBarModifier<TopBarContent: View>: ViewModifier {
-    @State private var minimized = false
+    @State private var isMinimized = false
     
     var behavior: TopBarBehavior
     @ViewBuilder let topBarContent: (Bool) -> TopBarContent
     
-    private var minimizedBinding: Binding<Bool> {
+    private var isMinimizedBinding: Binding<Bool> {
         switch behavior {
         case .alwaysMinimized:
                 .constant(true)
         case .neverMinimized:
                 .constant(false)
         case .standard:
-            $minimized
+            $isMinimized
         }
     }
     
     func body(content: Content) -> some View {
         content
-            .toggleOnScroll(minimizedBinding)
+            .toggleOnScroll(isMinimizedBinding)
             .safeAreaInset(edge: .top) {
-                TopBar(minimized: minimizedBinding, content: topBarContent)
+                TopBar(isMinimized: isMinimizedBinding, content: topBarContent)
             }
     }
 }
@@ -62,12 +62,12 @@ fileprivate struct TopBarModifier<TopBarContent: View>: ViewModifier {
 extension View {
     func topBar(title: String, behavior: TopBarBehavior = .standard) -> some View {
         modifier(
-            TopBarModifier<AnyView>(behavior: behavior) { minimized in
+            TopBarModifier<AnyView>(behavior: behavior) { isMinimized in
                 AnyView(
                     Text(title)
-                        .font(minimized ? .body : .largeTitle)
+                        .font(isMinimized ? .body : .largeTitle)
                         .bold()
-                        .frame(maxWidth: .infinity, alignment: minimized ? .center : .leading)
+                        .frame(maxWidth: .infinity, alignment: isMinimized ? .center : .leading)
                 )
             }
         )
@@ -79,20 +79,20 @@ extension View {
 //        @ViewBuilder content: @escaping (_ title: AnyView) -> Content
 //    ) -> some View {
 //        modifier(
-//            TopBarModifier<Content>(behavior: behavior) { minimized in
+//            TopBarModifier<Content>(behavior: behavior) { isMinimized in
 //                content(
 //                    AnyView(
 //                        Text(title)
-//                            .font(minimized ? .title3 : .largeTitle)
+//                            .font(isMinimized ? .title3 : .largeTitle)
 //                            .bold()
-//                            .frame(maxWidth: .infinity, alignment: minimized ? .center : .leading)
+//                            .frame(maxWidth: .infinity, alignment: isMinimized ? .center : .leading)
 //                    )
 //                )
 //            }
 //        )
 //    }
     
-    func topBar<Content: View>(behavior: TopBarBehavior = .standard, @ViewBuilder content: @escaping (_ minimized: Bool) -> Content) -> some View {
+    func topBar<Content: View>(behavior: TopBarBehavior = .standard, @ViewBuilder content: @escaping (_ isMinimized: Bool) -> Content) -> some View {
         modifier(TopBarModifier(behavior: behavior, topBarContent: content))
     }
 }

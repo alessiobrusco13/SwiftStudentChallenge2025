@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StudyProjectTopBar: View {
     let project: StudyProject
-    @Binding var editing: Bool
+    @Binding var isEditing: Bool
     
     @Environment(\.dismiss) private var dismiss
     
@@ -44,7 +44,7 @@ struct StudyProjectTopBar: View {
                 Spacer()
                 
                 Button {
-                    editing = true
+                    isEditing = true
                 } label: {
                     Label("Edit Project", systemImage: "slider.horizontal.3")
                         .font(.title3)

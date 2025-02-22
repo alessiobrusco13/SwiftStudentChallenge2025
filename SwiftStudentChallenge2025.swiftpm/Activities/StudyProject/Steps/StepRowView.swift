@@ -30,7 +30,7 @@ struct StepRowView<DeleteButton: View>: View {
     ) {
         _step = step
         _selection = selection
-        _graphicCompletedState = State(initialValue: step.completed.wrappedValue)
+        _graphicCompletedState = State(initialValue: step.isCompleted.wrappedValue)
         self.deleteButton = deleteButton
     }
     
@@ -88,7 +88,7 @@ struct StepRowView<DeleteButton: View>: View {
                 try? await Task.sleep(for: .seconds(0.5))
                 
                 withAnimation {
-                    step.completed = graphicCompletedState
+                    step.isCompleted = graphicCompletedState
                 }
             }
         } label: {

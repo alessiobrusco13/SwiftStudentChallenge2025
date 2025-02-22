@@ -15,7 +15,7 @@ struct StudyProjectView: View {
     
     @AppStorage(Model.currentProjectIDKey) private var currentProjectID: String?
     
-    @State private var editing = false
+    @State private var isEditing = false
     @State private var showingEmotionLogger = false
     
     @State private var stepSelection: StudyProject.Step?
@@ -42,7 +42,7 @@ struct StudyProjectView: View {
                 }
             }
             .topBar(behavior: .alwaysMinimized) { _ in
-                StudyProjectTopBar(project: project, editing: $editing)
+                StudyProjectTopBar(project: project, isEditing: $isEditing)
             }
             .toolbarVisibility(.hidden)
             .overlay {
@@ -80,7 +80,7 @@ struct StudyProjectView: View {
                 stepSelection = nil
                 showingAllSteps = false
             }
-            .sheet(isPresented: $editing) {
+            .sheet(isPresented: $isEditing) {
                 ProjectDebugView(project: project)
             }
             .interactiveDismissDisabled(startProjectViewExpanded)

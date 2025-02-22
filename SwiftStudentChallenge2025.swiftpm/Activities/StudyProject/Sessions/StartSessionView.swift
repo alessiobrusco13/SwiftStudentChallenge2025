@@ -51,7 +51,7 @@ struct StartProjectView: View {
                 isExpanded.toggle()
             }
         } label: {
-            Label("Start Study Session", systemImage: "play.fill")
+            Label("Start a Study Session", systemImage: "play.fill")
                 .font(.headline)
                 .padding(12)
                 .frame(maxWidth: 350)

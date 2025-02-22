@@ -46,7 +46,7 @@ struct StudyProjectItemView: View {
             .matchedTransitionSource(id: project.id, in: namespace)
             .overlay(alignment: .bottom, content: titleView)
             .overlay(alignment: .topTrailing) {
-                if project.completed {
+                if project.isCompleted {
                     icon(for: "checkmark")
                 } else if let deadlineString {
                     deadlineView(deadlineString)

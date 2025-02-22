@@ -13,7 +13,7 @@ import SwiftUI
 // [X] Date format localisation.
 
 struct HomeTopBar<Content: View>: View {
-    let minimized: Bool
+    let isMinimized: Bool
     @ViewBuilder let content: () -> Content
     
     @Environment(Model.self) private var model
@@ -30,7 +30,7 @@ struct HomeTopBar<Content: View>: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                if showingWelcome && !minimized {
+                if showingWelcome && !isMinimized {
                     Text(welcomeText)
                         .font(.largeTitle)
                         .fontWeight(.bold)
@@ -40,13 +40,13 @@ struct HomeTopBar<Content: View>: View {
                 
                 HStack(alignment: .firstTextBaseline) {
                     Text("Today")
-                        .font((showingWelcome || minimized) ? .headline : .largeTitle)
-                        .foregroundStyle((showingWelcome && !minimized) ?  .secondary : .primary)
+                        .font((showingWelcome || isMinimized) ? .headline : .largeTitle)
+                        .foregroundStyle((showingWelcome && !isMinimized) ?  .secondary : .primary)
                     
                     
                     Text(formattedDate)
-                        .font((showingWelcome || minimized) ? .callout : .title2)
-                        .foregroundStyle((showingWelcome && !minimized) ?  .tertiary : .secondary)
+                        .font((showingWelcome || isMinimized) ? .callout : .title2)
+                        .foregroundStyle((showingWelcome && !isMinimized) ?  .tertiary : .secondary)
                 }
                 .fontWeight(.bold)
             }
@@ -69,11 +69,11 @@ struct HomeTopBar<Content: View>: View {
 }
 
 #Preview {
-    @Previewable @State var minimized = false
+    @Previewable @State var isMinimized = false
     
     ZStack {
         VStack {
-            HomeTopBar(minimized: minimized) {
+            HomeTopBar(isMinimized: isMinimized) {
                 Button {
                     
                 } label: {
@@ -88,7 +88,7 @@ struct HomeTopBar<Content: View>: View {
             
             HStack {
                 Button("Toggle Minimization") {
-                    minimized.toggle()
+                    isMinimized.toggle()
                 }
             }
             .buttonStyle(.borderedProminent)

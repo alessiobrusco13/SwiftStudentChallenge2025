@@ -13,14 +13,16 @@ import SwiftData
     
     var startDate: Date
     var duration: TimeInterval
+    var isPaused: Bool
     var pauses: [Pause]?
     
     var project: StudyProject
     
-    init(startDate: Date = .now, duration: TimeInterval, pauses: [Pause]?, project: StudyProject) {
+    init(startDate: Date = .now, duration: TimeInterval, isPaused: Bool = false, pauses: [Pause]?, project: StudyProject) {
         self.id = UUID()
         self.startDate = startDate
         self.duration = duration
+        self.isPaused = isPaused
         self.pauses = pauses
         self.project = project
     }
