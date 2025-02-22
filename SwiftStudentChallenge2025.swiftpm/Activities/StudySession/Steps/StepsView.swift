@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// Add a button to add steps. It adds an empty one, then it selects it and focuses it.
 struct StepsView: View {
     @Binding var steps: [StudySession.Step]
     @Binding var selection: StudySession.Step?
@@ -28,9 +29,13 @@ struct StepsView: View {
             }
         } label: {
             HStack {
-                heading
-                
-                Spacer()
+                HStack(spacing: 0) {
+                    heading
+                    
+                    Spacer()
+                }
+                .contentShape(.containerRelative)
+                .onTapGesture(perform: expandAction)
                 
                 Button(action: expandAction, label: expandButtonLabel)
                     .buttonBorderShape(.circle)

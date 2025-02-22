@@ -17,11 +17,11 @@ struct StudySessionView: View {
     
     @State private var editing = false
     @State private var showingEmotionLogger = false
+    
     @State private var stepSelection: StudySession.Step?
     @State private var showingAllSteps = false
-    @State private var showingStartSessionPicker = false
     
-    @Namespace private var namespace
+    @State private var startSessionViewExpanded = false
     
     var body: some View {
         NavigationStack {
@@ -37,7 +37,7 @@ struct StudySessionView: View {
                         view
                             .foregroundStyle(.black.opacity(
                                 (stepSelection != nil) || showingAllSteps
-                                ? 0.2
+                                ? 0.4
                                 : 0
                             ))
                     }
@@ -56,45 +56,19 @@ struct StudySessionView: View {
                 StudySessionTopBar(session: session, editing: $editing)
             }
             .toolbarVisibility(.hidden)
-            .safeAreaInset(edge: .bottom) {
-                ZStack(alignment: .bottom) {
-                    ProgressiveBlur()
-                        .ignoresSafeArea()
-                        .frame(maxHeight: 70)
-                    
-                    if showingStartSessionPicker {
-                        RoundedRectangle(cornerRadius: 24)
-                            .fill(.prominentGlass)
-                            .colorScheme(.light)
-                            .frame(maxHeight: 300)
-                            .ignoresSafeArea()
-                            .shadow(color: .black.opacity(0.2), radius: 10)
-                            .padding(.horizontal)
-                            .matchedGeometryEffect(id: "test", in: namespace)
-                            .onTapGesture {
-                                withAnimation(.bouncy(duration: 0.2)) {
-                                    showingStartSessionPicker.toggle()
-                                }
-                            }
-                    } else {
-                        Button {
-                            // This maybe adds opacity to the background. It dims everything but the timer. On tap everything gets back to normal for little time
-                            withAnimation(.bouncy(duration: 0.2)) {
-                                showingStartSessionPicker.toggle()
-                            }
-                        } label: {
-                            Text("Start Study Session")
-                                .font(.headline)
-                                .padding(12)
-                                .frame(maxWidth: 350)
+            .overlay {
+                Rectangle()
+                    .fill(.black.opacity(startSessionViewExpanded ? 0.4 : 0))
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation {
+                            startSessionViewExpanded = false
                         }
-                        .buttonBorderShape(.roundedRectangle(radius: 24))
-                        .buttonStyle(.prominentGlass)
-                        .shadow(color: .black.opacity(0.2), radius: 10)
-                        .padding(.horizontal)
-                        .matchedGeometryEffect(id: "test", in: namespace)
                     }
-                }
+            }
+            .safeAreaInset(edge: .bottom) {
+                // This maybe adds opacity to the background. It dims everything but the timer. On tap everything gets back to normal for little time
+                StartSessionView(isExpanded: $startSessionViewExpanded)
             }
             .presentationBackground {
                 // Not the best implementation
@@ -102,7 +76,7 @@ struct StudySessionView: View {
             }
             .contentShape(.rect)
             .onTapGesture(perform: deselectSteps)
-            .emotionLogger(isPresented: $showingEmotionLogger, session: session)
+//            .emotionLogger(isPresented: $showingEmotionLogger, session: session)
             .onAppear {
                 currentSessionID = session.id.uuidString
                 setupEmotionLogger()
@@ -114,13 +88,7 @@ struct StudySessionView: View {
             .sheet(isPresented: $editing) {
                 SessionDebugView(session: session)
             }
-            //            .sheet(isPresented: $showingStartSessionPicker) {
-            //                Text("Hello")
-            //                    .presentationDetents([.fraction(0.4)])
-            //                    .presentationBackground(.glass)
-            //                    .presentationCornerRadius(32)
-            //                    .preferredColorScheme(.light)
-            //            }
+            .interactiveDismissDisabled(startSessionViewExpanded)
         }
     }
     
