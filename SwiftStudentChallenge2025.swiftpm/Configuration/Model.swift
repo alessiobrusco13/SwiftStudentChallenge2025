@@ -17,7 +17,7 @@ final class Model {
     var shouldShowWelcomeScreen = true
     
     static let hasOnboardedKey = "hasOnboarded"
-    static let currentProjectIDKey = "currentProjectID"
+    static let activeProjectIDKey = "activeProjectID"
     
     static let preview = {
         let model = Model(inMemory: true)
@@ -104,6 +104,16 @@ final class Model {
         let log = EmotionLog(emotion: emotion)
         modelContext.insert(log)
         project.emotionLogs.append(log)
+    }
+    
+    func startSession(for project: StudyProject, duration: TimeInterval, allowPausing: Bool, in modelContext: ModelContext) {
+        let session = StudySession(duration: duration, pauses: allowPausing ? [] : nil, project: project)
+        modelContext.insert(session)
+        
+        project.sessions.append(session)
+        project.currentSessionID = session.id
+        
+        UserDefaults.standard.set(project.id.uuidString, forKey: Model.activeProjectIDKey)
     }
 }
 

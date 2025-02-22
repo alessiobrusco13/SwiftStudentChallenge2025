@@ -21,7 +21,9 @@ struct HomeView: View {
     static let activeProjectsFilter = #Predicate<StudyProject> { $0.isCompleted == false }
     static let completedProjectsFilter = #Predicate<StudyProject> { $0.isCompleted }
     
-    @AppStorage(Model.currentProjectIDKey) private var currentProjectID: String?
+    
+    // Active project means that it has a currently running study session in it. When there is an active project the user cannot access any of the other projects
+    @AppStorage(Model.activeProjectIDKey) private var currentProjectID: String?
     
     var currentProject: StudyProject? {
         guard

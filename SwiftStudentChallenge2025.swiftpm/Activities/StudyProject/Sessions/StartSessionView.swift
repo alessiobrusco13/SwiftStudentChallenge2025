@@ -1,5 +1,5 @@
 //
-//  StartProjectView.swift
+//  StartSessionView.swift
 //  SwiftStudentChallenge2025
 //
 //  Created by Alessio Garzia Marotta Brusco on 22/02/25.
@@ -11,15 +11,19 @@ import SwiftUI
 // – [] Send notifications after 15 mins of pause.
 
 
-struct StartProjectView: View {
+struct StartSessionView: View {
     @Binding var isExpanded: Bool
-    let appearance: StudyProject.Appearance
+    var project: StudyProject
     let onButtonPress: () -> Void
     
     @State private var duration = 0.5
     @State private var allowPausing = false
     
+    @State private var showingExpandButton: Bool
     @Namespace private var namespace
+    
+    @Environment(Model.self) private var model
+    @Environment(\.modelContext) private var modelContext
     
     var durationString: String {
         let hours = floor(duration)
@@ -31,30 +35,49 @@ struct StartProjectView: View {
         return hoursString + minutesString
     }
     
+    var sessionCreated: Bool {
+        project.currentSessionID != nil
+    }
+    
+    init(isExpanded: Binding<Bool>, project: StudyProject, onButtonPress: @escaping () -> Void) {
+        _isExpanded = isExpanded
+        self.project = project
+        self.onButtonPress = onButtonPress
+        
+        _showingExpandButton = State(initialValue: project.currentSessionID == nil)
+    }
+    
     var body: some View {
         if !isExpanded {
-            ZStack(alignment: .bottom) {
-                ProgressiveBlur()
-                    .ignoresSafeArea()
-                    .frame(maxHeight: 70)
-                
-                startButton
+            if showingExpandButton {
+                ZStack(alignment: .bottom) {
+                    ProgressiveBlur()
+                        .ignoresSafeArea()
+                        .frame(maxHeight: 70)
+                    
+                    expandButton
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         } else {
             sessionOptionsForm
         }
     }
     
-    private var startButton: some View {
+    private var expandButton: some View {
         Button {
             withAnimation(.bouncy) {
                 isExpanded.toggle()
             }
         } label: {
-            Label("Start a Study Session", systemImage: "play.fill")
-                .font(.headline)
-                .padding(12)
-                .frame(maxWidth: 350)
+            Label(
+                !sessionCreated ? "Start a Study Session" : "Study Well",
+                systemImage: !sessionCreated ? "play.fill" : "checkmark"
+            )
+            .font(.headline)
+            .padding(12)
+            .frame(maxWidth: 350)
+
         }
         .buttonBorderShape(.roundedRectangle(radius: 24))
         .buttonStyle(.prominentGlass)
@@ -63,6 +86,31 @@ struct StartProjectView: View {
         .matchedGeometryEffect(id: "startButton", in: namespace)
         .onTapGesture(perform: onButtonPress)
         .padding(.bottom)
+        .disabled(sessionCreated)
+    }
+    
+    private var startButtonItem: some View {
+        Button {
+            Task { @MainActor in
+                withAnimation {
+                    startSession()
+                    isExpanded.toggle()
+                }
+                
+                try? await Task.sleep(for: .seconds(1.5))
+                
+                withAnimation {
+                    showingExpandButton = false
+                }
+            }
+        } label: {
+            Label("Start", systemImage: "play.fill")
+                .font(.headline)
+                .fixedSize()
+        }
+        .buttonBorderShape(.capsule)
+        .buttonStyle(.prominentGlass)
+        .matchedGeometryEffect(id: "startButton", in: namespace)
     }
     
     private var sessionOptionsForm: some View {
@@ -72,26 +120,28 @@ struct StartProjectView: View {
                 .ignoresSafeArea()
                 .frame(maxHeight: 200)
             
-            VStack(spacing: 15) {
-                VStack {
-                    HStack {
-                        Text("Study Session options")
-                            .font(.title3)
-                            .bold()
-                            .fontStyling(for: appearance)
-                        
-                        Spacer()
-                        
-                        startButtonItem
-                    }
+            VStack {
+                HStack(alignment: .center) {
+                    Text("Study Session options")
+                        .font(.title3)
+                        .bold()
+                        .fontStyling(for: project.appearance)
                     
-                    Divider()
+                    Spacer()
+                    
+                    startButtonItem
                 }
+                .padding(.top, -15)
                 
-                Stepper("**Duration:** \(durationString)", value: $duration, in: 0.5...4, step: 0.5)
+                Divider()
+                    .padding(.bottom)
                 
-                Toggle("**Allow Pausing**", isOn: $allowPausing)
-                    .disabled(duration < 1)
+                VStack(spacing: 15) {
+                    Stepper("**Duration:** \(durationString)", value: $duration, in: 0.5...4, step: 0.5)
+                    
+                    Toggle("**Allow Pausing**", isOn: $allowPausing)
+                        .disabled(duration < 1)
+                }
                 
             }
             .padding(.horizontal)
@@ -106,23 +156,14 @@ struct StartProjectView: View {
                 allowPausing = false
             }
         }
-
     }
     
-    private var startButtonItem: some View {
-        Button {
-            withAnimation {
-                isExpanded.toggle()
-            }
-        } label: {
-            Label("Start", systemImage: "play.fill")
-                .font(.headline)
-                .fixedSize()
-        }
-        .buttonBorderShape(.capsule)
-        .buttonStyle(.prominentGlass)
-        .matchedGeometryEffect(id: "startButton", in: namespace)
-        .padding(.bottom)
+    func startSession() {
+        model.startSession(
+            for: project,
+            duration: duration,
+            allowPausing: allowPausing,
+            in: modelContext
+        )
     }
-    
 }

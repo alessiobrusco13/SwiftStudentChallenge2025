@@ -13,7 +13,7 @@ struct StudyProjectView: View {
     @Environment(Model.self) private var model
     @Environment(\.modelContext) private var modelContext
     
-    @AppStorage(Model.currentProjectIDKey) private var currentProjectID: String?
+    @AppStorage(Model.activeProjectIDKey) private var currentProjectID: String?
     
     @State private var isEditing = false
     @State private var showingEmotionLogger = false
@@ -21,7 +21,7 @@ struct StudyProjectView: View {
     @State private var stepSelection: StudyProject.Step?
     @State private var showingAllSteps = false
     
-    @State private var startProjectViewExpanded = false
+    @State private var startSessionViewExpanded = false
     
     var body: some View {
         NavigationStack {
@@ -47,20 +47,17 @@ struct StudyProjectView: View {
             .toolbarVisibility(.hidden)
             .overlay {
                 Rectangle()
-                    .fill(.black.opacity(startProjectViewExpanded ? 0.4 : 0))
+                    .fill(.black.opacity(startSessionViewExpanded ? 0.4 : 0))
                     .ignoresSafeArea()
                     .onTapGesture {
                         withAnimation {
-                            startProjectViewExpanded = false
+                            startSessionViewExpanded = false
                         }
                     }
             }
             .safeAreaInset(edge: .bottom) {
                 // This maybe adds opacity to the background. It dims everything but the timer. On tap everything gets back to normal for little time
-                StartProjectView(
-                    isExpanded: $startProjectViewExpanded,
-                    appearance: project.appearance
-                ) {
+                StartSessionView(isExpanded: $startSessionViewExpanded, project: project) {
                     stepSelection = nil
                 }
                 .disabled(stepSelection != nil || showingAllSteps)
@@ -83,7 +80,7 @@ struct StudyProjectView: View {
             .sheet(isPresented: $isEditing) {
                 ProjectDebugView(project: project)
             }
-            .interactiveDismissDisabled(startProjectViewExpanded)
+            .interactiveDismissDisabled(startSessionViewExpanded)
         }
     }
     

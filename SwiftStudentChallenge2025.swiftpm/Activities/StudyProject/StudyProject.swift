@@ -39,6 +39,9 @@ final class StudyProject: Identifiable {
     var isCompleted: Bool
     var steps: [Step]
     
+    @Relationship(deleteRule: .cascade, inverse: \StudySession.project) var sessions: [StudySession]
+    var currentSessionID: StudyProject.ID?
+    
     var startDate: Date
 #warning("It's important the user doesn't change the end date lightly. Be sure to prompt the user about it.")
     var endDate: Date
@@ -59,6 +62,7 @@ final class StudyProject: Identifiable {
     ) {
         id = UUID()
         steps = []
+        sessions = []
         
         self.title = title
         self.details = details
