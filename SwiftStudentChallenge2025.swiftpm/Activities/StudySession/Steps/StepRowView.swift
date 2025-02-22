@@ -91,7 +91,7 @@ struct StepRowView<DeleteButton: View>: View {
                 }
             }
         } label: {
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 6)
                 .stroke(.secondary, lineWidth: 2)
                 .overlay {
                     if graphicCompletedState {
@@ -101,6 +101,7 @@ struct StepRowView<DeleteButton: View>: View {
                             .font(.caption)
                     }
                 }
+                .padding(1)
         }
         .buttonStyle(.pressable)
         .frame(width: 20, height: 20)

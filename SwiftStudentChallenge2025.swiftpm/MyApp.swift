@@ -5,7 +5,7 @@ import SwiftUI
 // – [] Essays
 
 // – [] Fix background view (use a timeline view)
-// – [] Session Cration (Ask 'what are you doing this for?' 'Other times this has gone through' etc)
+// – [] Session Creation (Ask 'what are you doing this for?' 'Other times this has gone through' etc)
 // – [] iPad optimization (what to show alongside the sessions)
 // – [] Onboarding
 // ? [] VoiceOver
@@ -21,6 +21,8 @@ import SwiftUI
 //  – [] invitare a pensare al perché delle cose (perché sto per procrastinare) magari quando si clicca il pulsante per fermarsi
 
 // – [] NEGRO Natural language sentiment analysis
+
+// MARK: VEDI magari fai che quando ti locki ti compare una schermata fissa (magari animata) e quando provi a fare pausa ti dice no no no, troppo poco tempo.
 
 @main
 struct MyApp: App {
