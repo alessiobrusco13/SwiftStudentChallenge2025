@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-// Could make timer expandable.
+// Could make timer expandable. Modify time making it always have 2 digits (e.g. 01 and not 1).
+// It always starts at 58 secs.
 struct StudySessionView: View {
     let project: StudyProject
     let session: StudySession
@@ -15,6 +16,9 @@ struct StudySessionView: View {
     @State private var hours: Int
     @State private var minutes: Int
     @State private var seconds: Int
+    
+    @Environment(Model.self) private var model
+    @State private var isComplete = false
     
     init(project: StudyProject, session: StudySession) {
         self.project = project
@@ -56,8 +60,14 @@ struct StudySessionView: View {
                 .onChange(of: timeline.date, updateTimer)
             }
         } label: {
-            Text("Study Session")
-                .fontStyling(for: project.appearance)
+            if !isComplete {
+                Text("Study Session")
+                    .transition(.blurReplace)
+            } else {
+                Label("Time's up, well done!", systemImage: "sparkles")
+                    .symbolEffect(.bounce)
+                    .transition(.blurReplace)
+            }
         }
         .groupBoxStyle(.glass)
         .padding([.top, .horizontal], 16)
@@ -78,13 +88,34 @@ struct StudySessionView: View {
     }
     
     private func updateTimer() {
+        guard !isComplete else { return }
         guard !session.isPaused else { return }
+        
         let components = session.timeRemaining.components()
+        
+        guard components != (0, 0, 0) else {
+            completeSession()
+            return
+        }
         
         withAnimation {
             hours = components.hours
             minutes = components.minutes
             seconds = components.seconds
+        }
+    }
+    
+    private func completeSession() {
+        Task { @MainActor in
+            withAnimation {
+                isComplete = true
+            }
+            
+            try? await Task.sleep(for: .seconds(1.5))
+            
+            withAnimation {
+                model.completeSession(for: project)
+            }
         }
     }
     

@@ -115,6 +115,11 @@ final class Model {
         
         UserDefaults.standard.set(project.id.uuidString, forKey: Model.activeProjectIDKey)
     }
+    
+    func completeSession(for project: StudyProject) {
+        project.currentSessionID = nil
+        UserDefaults.standard.set(nil, forKey: Model.activeProjectIDKey)
+    }
 }
 
 // TODO: Handle settings

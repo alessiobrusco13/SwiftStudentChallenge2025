@@ -17,7 +17,7 @@ import SwiftUI
 //  – [] perché stai studiando questa roba? (motivazionale)
 //  – [X] pulsante per iniziare e smettere di lockarsi
 //  – [] ricordare di fare pause
-//  – [] resoconto mood nel mentre
+//  – [] resoconto mood nel mentre (mindfulness tab)
 //  – [] invitare a pensare al perché delle cose (perché sto per procrastinare) magari quando si clicca il pulsante per fermarsi
 //  – [] Feelings section, encourage reflection. ~ Sentiment Analysis
 

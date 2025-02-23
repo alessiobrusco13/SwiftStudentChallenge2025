@@ -19,7 +19,8 @@ class StudySession: Identifiable {
     var project: StudyProject
     
     init(startDate: Date = .now, duration: TimeInterval, pauses: [Pause]?, project: StudyProject) {
-        self.id = UUID()
+        id = UUID()
+        
         self.startDate = startDate
         self.duration = duration
         self.pauses = pauses
@@ -27,18 +28,18 @@ class StudySession: Identifiable {
     }
     
     init(startDate: Date = .now, duration: TimeInterval, allowPausing: Bool, project: StudyProject) {
-        self.id = UUID()
+        id = UUID()
+        pauses = allowPausing ? [] : nil
+        
         self.startDate = startDate
         self.duration = duration
         self.project = project
-        
-        pauses = allowPausing ? [] : nil
     }
     
     @MainActor static let example = StudySession(duration: 60*60, allowPausing: true, project: .example)
     
     var timeProgress: TimeInterval {
-        let timeFromStart = Date.now.timeIntervalSince(startDate)
+        let timeFromStart = min(Date.now.timeIntervalSince(startDate), duration)
         guard let pauses, !pauses.isEmpty else { return timeFromStart }
         
         let pauseDuration = pauses
@@ -47,9 +48,9 @@ class StudySession: Identifiable {
             .reduce(0, +)
         
         if let pauseIndex = currentPauseIndex() {
-            return pauses[pauseIndex].startDate.timeIntervalSince(startDate) - pauseDuration
+            return min(pauses[pauseIndex].startDate.timeIntervalSince(startDate) - pauseDuration, duration)
         } else {
-            return timeFromStart - pauseDuration
+            return min(timeFromStart - pauseDuration, duration)
         }
     }
     
