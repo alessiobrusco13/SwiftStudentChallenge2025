@@ -22,7 +22,7 @@ struct EmotionLogView: View {
                     .font(.title3)
                     .fontWeight(.bold)
                 
-                Text("Select one of the emotions below to track your overall mood while studying.")
+                Text("Select one of the emotions below and try to understand why you're feeling this way.")
                     .lineLimit(3, reservesSpace: true)
             }
             .multilineTextAlignment(.center)

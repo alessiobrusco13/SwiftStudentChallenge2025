@@ -13,8 +13,6 @@ struct StudyProjectView: View {
     @Environment(Model.self) private var model
     @Environment(\.modelContext) private var modelContext
     
-    @AppStorage(Model.activeProjectIDKey) private var currentProjectID: String?
-    
     @State private var isEditing = false
     @State private var showingEmotionLogger = false
     
@@ -36,7 +34,7 @@ struct StudyProjectView: View {
                     VStack(spacing: 12) {
                         if let session = project.currentSession() {
                             StudySessionView(project: project, session: session)
-                                .allowsHitTesting(stepSelection == nil)
+                            .allowsHitTesting(stepSelection == nil)
                         }
                         
                         StepsView(
@@ -44,6 +42,9 @@ struct StudyProjectView: View {
                             selection: $stepSelection,
                             showingAllSteps: $showingAllSteps
                         )
+                        
+                        MindfulnessView(project: project)
+                            .animation(.default, value: showingAllSteps || stepSelection != nil)
                     }
                 }
             }
@@ -63,7 +64,11 @@ struct StudyProjectView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 // This maybe adds opacity to the background. It dims everything but the timer. On tap everything gets back to normal for little time
-                StartSessionView(isExpanded: $startSessionViewExpanded, project: project) {
+                StartSessionView(
+                    isExpanded: $startSessionViewExpanded,
+                    project: project,
+                    showingEmotionLogger: $showingEmotionLogger
+                ) {
                     stepSelection = nil
                 }
                 .disabled(stepSelection != nil || showingAllSteps)
@@ -74,11 +79,7 @@ struct StudyProjectView: View {
             }
             .contentShape(.rect)
             .onTapGesture(perform: deselectSteps)
-            //            .emotionLogger(isPresented: $showingEmotionLogger, project: project)
-            .onAppear {
-                currentProjectID = project.id.uuidString
-                setupEmotionLogger()
-            }
+            .emotionLogger(isPresented: $showingEmotionLogger, project: project)
             .onDisappear {
                 stepSelection = nil
                 showingAllSteps = false
@@ -111,15 +112,5 @@ struct StudyProjectView: View {
         
         showingAllSteps = false
         stepSelection = nil
-    }
-    
-    func setupEmotionLogger() {
-        Task { @MainActor in
-            try? await Task.sleep(for: .seconds(0.6))
-            
-            withAnimation(.smooth) {
-                showingEmotionLogger = model.shouldShowEmotionLogger(for: project, context: modelContext)
-            }
-        }
     }
 }

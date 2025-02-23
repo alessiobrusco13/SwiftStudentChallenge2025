@@ -90,18 +90,8 @@ final class Model {
         }
     }
     
-    func shouldShowEmotionLogger(for project: StudyProject, context: ModelContext) -> Bool {
-        if let lastLog = lastEmotionLog(in: modelContext), (Date.now.timeIntervalSince1970 - lastLog.date.timeIntervalSince1970) < 30*60 {
-            return false
-        } else if let lastProjectLog = lastEmotionLog(for: project), (Date.now.timeIntervalSince1970 - lastProjectLog.date.timeIntervalSince1970) < 4*60*60 {
-            return false
-        } else {
-            return true
-        }
-    }
-    
     func log(_ emotion: Emotion, for project: StudyProject, in modelContext: ModelContext) {
-        let log = EmotionLog(emotion: emotion)
+        let log = EmotionLog(emotion: emotion, project: project)
         modelContext.insert(log)
         project.emotionLogs.append(log)
     }

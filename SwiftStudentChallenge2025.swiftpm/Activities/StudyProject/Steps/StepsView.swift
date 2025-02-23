@@ -20,11 +20,11 @@ struct StepsView: View {
         project.steps.first { $0.isCompleted == false }
     }
     
-    private var paddingEdges: Edge.Set {
+    private var paddingEdges: Edge.Set.ArrayLiteralElement {
         if project.currentSessionID == nil || ((selection != nil) && !showingAllSteps) {
-            .all
+            [.horizontal, .top]
         } else {
-            .horizontal
+            [.horizontal]
         }
     }
     

@@ -62,10 +62,12 @@ struct StudySessionView: View {
         } label: {
             if !isComplete {
                 Text("Study Session")
+                    .fontStyling(for: project.appearance)
                     .transition(.blurReplace)
             } else {
                 Label("Time's up, well done!", systemImage: "sparkles")
                     .symbolEffect(.bounce)
+                    .fontStyling(for: project.appearance)
                     .transition(.blurReplace)
             }
         }
@@ -108,6 +110,9 @@ struct StudySessionView: View {
     private func completeSession() {
         Task { @MainActor in
             withAnimation {
+                hours = 0
+                minutes = 0
+                seconds = 0
                 isComplete = true
             }
             

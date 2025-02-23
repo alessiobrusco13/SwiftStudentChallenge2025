@@ -22,9 +22,9 @@ final class EmotionLog: Identifiable {
     var emotion: Emotion
     var date: Date
     
-    var project: StudyProject?
+    var project: StudyProject
     
-    init(emotion: Emotion, project: StudyProject? = nil) {
+    init(emotion: Emotion, project: StudyProject) {
         id = UUID()
         date = .now
         

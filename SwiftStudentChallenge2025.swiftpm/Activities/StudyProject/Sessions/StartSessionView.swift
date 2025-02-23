@@ -13,6 +13,7 @@ import SwiftUI
 struct StartSessionView: View {
     @Binding var isExpanded: Bool
     var project: StudyProject
+    @Binding var showingEmotionLogger: Bool
     let onButtonPress: () -> Void
     
     @State private var duration: TimeInterval = 30*60
@@ -28,9 +29,10 @@ struct StartSessionView: View {
         project.currentSessionID != nil
     }
     
-    init(isExpanded: Binding<Bool>, project: StudyProject, onButtonPress: @escaping () -> Void) {
+    init(isExpanded: Binding<Bool>, project: StudyProject, showingEmotionLogger: Binding<Bool>, onButtonPress: @escaping () -> Void) {
         _isExpanded = isExpanded
         self.project = project
+        _showingEmotionLogger = showingEmotionLogger
         self.onButtonPress = onButtonPress
         
         _showingExpandButton = State(initialValue: project.currentSessionID == nil)
@@ -107,6 +109,12 @@ struct StartSessionView: View {
                 }
                 
                 resetState()
+                
+                try? await Task.sleep(for: .seconds(1.5))
+                
+                withAnimation {
+                    showingEmotionLogger = true
+                }
             }
         } label: {
             Label("Start", systemImage: "play.fill")
