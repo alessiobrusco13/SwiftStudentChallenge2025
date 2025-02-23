@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// Could make timer expandable.
 struct StudySessionView: View {
     let project: StudyProject
     let session: StudySession
@@ -38,17 +39,9 @@ struct StudySessionView: View {
         GroupBox {
             TimelineView(.periodic(from: .now, by: 1)) { timeline in
                 HStack {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 0) {
                         HStack {
-                            HStack(spacing: 0) {
-                                Text("\(hours):")
-                                Text("\(minutes):")
-                                Text("\(seconds)")
-                            }
-                            .contentTransition(.numericText(countsDown: true))
-                            .fixedSize()
-                            .font(.largeTitle)
-                            .foregroundStyle(session.isPaused ? .secondary : .primary)
+                            timer
                             
                             Spacer()
                             
@@ -60,14 +53,7 @@ struct StudySessionView: View {
                             .foregroundStyle(session.isPaused ? .secondary : .primary)
                     }
                 }
-                .onChange(of: timeline.date) {
-                    guard !session.isPaused else { return }
-                    let components = session.timeRemaining.components()
-                    
-                    hours = components.hours
-                    minutes = components.minutes
-                    seconds = components.seconds
-                }
+                .onChange(of: timeline.date, updateTimer)
             }
         } label: {
             Text("Study Session")
@@ -77,6 +63,29 @@ struct StudySessionView: View {
         .padding([.top, .horizontal], 16)
         .animation(.default, value: session.isPaused)
         .transition(.move(edge: .trailing).combined(with: .opacity))
+    }
+    
+    private var timer: some View {
+        HStack(spacing: 0) {
+            Text("\(hours):")
+            Text("\(minutes):")
+            Text("\(seconds)")
+        }
+        .contentTransition(.numericText(countsDown: true))
+        .fixedSize()
+        .font(.largeTitle)
+        .foregroundStyle(session.isPaused ? .secondary : .primary)
+    }
+    
+    private func updateTimer() {
+        guard !session.isPaused else { return }
+        let components = session.timeRemaining.components()
+        
+        withAnimation {
+            hours = components.hours
+            minutes = components.minutes
+            seconds = components.seconds
+        }
     }
     
     private var togglePauseButton: some View {
@@ -94,13 +103,27 @@ struct StudySessionView: View {
             .buttonStyle(.pressable)
             
             Circle()
-                .stroke(.thinMaterial, lineWidth: 5)
+                .stroke(.ultraThinMaterial, style: .init(lineWidth: 5, lineCap: .round, lineJoin: .miter))
                 .frame(width: 48, height: 48)
                 .colorScheme(.light)
+            
+            Circle()
+                .trim(from: 0, to: 1 - session.progress)
+                .stroke(.thinMaterial, style: .init(lineWidth: 5, lineCap: .round, lineJoin: .miter))
+                .frame(width: 48, height: 48)
+                .colorScheme(.light)
+                .rotationEffect(.degrees(-90))
         }
         .contentShape(.circle)
         .onTapGesture(perform: togglePause)
-        
+    }
+    
+    private func togglePause() {
+        if session.isPaused {
+            session.resume()
+        } else {
+            session.pause()
+        }
     }
     
     private var cancelButton: some View {
@@ -117,14 +140,6 @@ struct StudySessionView: View {
         }
         .buttonBorderShape(.circle)
         .buttonStyle(.prominentGlass)
-    }
-    
-    private func togglePause() {
-        if session.isPaused {
-            session.resume()
-        } else {
-            session.pause()
-        }
     }
 }
 
