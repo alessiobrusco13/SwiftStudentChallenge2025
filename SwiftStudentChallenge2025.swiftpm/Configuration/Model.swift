@@ -107,7 +107,7 @@ final class Model {
     }
     
     func startSession(for project: StudyProject, duration: TimeInterval, allowPausing: Bool, in modelContext: ModelContext) {
-        let session = StudySession(duration: duration, pauses: allowPausing ? [] : nil, project: project)
+        let session = StudySession(duration: duration, allowPausing: allowPausing, project: project)
         modelContext.insert(session)
         
         project.sessions.append(session)

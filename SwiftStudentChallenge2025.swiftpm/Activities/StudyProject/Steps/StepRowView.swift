@@ -16,7 +16,7 @@ struct StepRowView<DeleteButton: View>: View {
     
     @State private var tappedName = false
     @State private var graphicCompletedState: Bool
-    @FocusState private var nameFieldFocused: Bool
+    private var nameFieldSelection: FocusState<UUID?>.Binding
     
     var isSelected: Bool {
         guard let selection else { return false }
@@ -26,11 +26,13 @@ struct StepRowView<DeleteButton: View>: View {
     init(
         step: Binding<StudyProject.Step>,
         selection: Binding<StudyProject.Step?>,
+        nameFieldSelection: FocusState<UUID?>.Binding,
         @ViewBuilder deleteButton: @escaping (_ step: StudyProject.Step) -> DeleteButton
     ) {
         _step = step
         _selection = selection
         _graphicCompletedState = State(initialValue: step.isCompleted.wrappedValue)
+        self.nameFieldSelection = nameFieldSelection
         self.deleteButton = deleteButton
     }
     
@@ -54,7 +56,7 @@ struct StepRowView<DeleteButton: View>: View {
                         selection = step
                     } else {
                         tappedName = true
-                        nameFieldFocused = true
+                        nameFieldSelection.wrappedValue = step.id
                     }
                 }
                 
@@ -120,7 +122,7 @@ struct StepRowView<DeleteButton: View>: View {
             TextField("Step name", text: $step.name)
                 .font(isSelected ? .title2 : .body)
                 .bold()
-                .focused($nameFieldFocused)
+                .focused(nameFieldSelection, equals: step.id)
         }
     }
 }
@@ -128,6 +130,7 @@ struct StepRowView<DeleteButton: View>: View {
 #Preview {
     @Previewable @State var step = StudyProject.Step.example
     @Previewable @State var selection: StudyProject.Step? = nil
+    @Previewable @FocusState var nameFieldSelection: UUID?
     
     ZStack {
         Color.green
@@ -143,7 +146,7 @@ struct StepRowView<DeleteButton: View>: View {
         .buttonStyle(.passthrough)
         .disabled(selection == nil)
         
-        StepRowView(step: $step, selection: $selection) { _ in }
+        StepRowView(step: $step, selection: $selection, nameFieldSelection: $nameFieldSelection) { _ in }
             .preferredColorScheme(.dark)
     }
     .animation(.default.speed(2), value: selection?.id)

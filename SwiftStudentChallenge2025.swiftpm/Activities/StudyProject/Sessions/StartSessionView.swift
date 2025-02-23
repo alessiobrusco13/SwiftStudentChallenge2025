@@ -10,13 +10,12 @@ import SwiftUI
 // – [] Can't start pause before 30 mins of studying (calculate based on last pause).
 // – [] Send notifications after 15 mins of pause.
 
-
 struct StartSessionView: View {
     @Binding var isExpanded: Bool
     var project: StudyProject
     let onButtonPress: () -> Void
     
-    @State private var duration = 0.5
+    @State private var duration: TimeInterval = 30*60
     @State private var allowPausing = false
     
     @State private var showingExpandButton: Bool
@@ -25,17 +24,7 @@ struct StartSessionView: View {
     @Environment(Model.self) private var model
     @Environment(\.modelContext) private var modelContext
     
-    var durationString: String {
-        let hours = floor(duration)
-        let minutes = (duration - hours) * 60
-        
-        let hoursString = hours != 0 ? "\(hours.formatted()) hr " : ""
-        let minutesString = minutes != 0 ? "\(minutes.formatted()) min" : ""
-        
-        return hoursString + minutesString
-    }
-    
-    var sessionCreated: Bool {
+    private var sessionCreated: Bool {
         project.currentSessionID != nil
     }
     
@@ -48,19 +37,28 @@ struct StartSessionView: View {
     }
     
     var body: some View {
-        if !isExpanded {
-            if showingExpandButton {
-                ZStack(alignment: .bottom) {
-                    ProgressiveBlur()
-                        .ignoresSafeArea()
-                        .frame(maxHeight: 70)
-                    
-                    expandButton
+        Group {
+            if !isExpanded {
+                if showingExpandButton {
+                    ZStack(alignment: .bottom) {
+                        ProgressiveBlur()
+                            .ignoresSafeArea()
+                            .frame(maxHeight: 70)
+                        
+                        expandButton
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+            } else {
+                sessionOptionsForm
             }
-        } else {
-            sessionOptionsForm
+        }
+        .onChange(of: project.currentSessionID) {
+            if project.currentSessionID == nil {
+                withAnimation {
+                    showingExpandButton = true
+                }
+            }
         }
     }
     
@@ -93,15 +91,22 @@ struct StartSessionView: View {
         Button {
             Task { @MainActor in
                 withAnimation {
-                    startSession()
                     isExpanded.toggle()
                 }
                 
-                try? await Task.sleep(for: .seconds(1.5))
+                try? await Task.sleep(for: .seconds(0.3))
+                
+                withAnimation {
+                    startSession()
+                }
+                
+                try? await Task.sleep(for: .seconds(1.2))
                 
                 withAnimation {
                     showingExpandButton = false
                 }
+                
+                resetState()
             }
         } label: {
             Label("Start", systemImage: "play.fill")
@@ -137,10 +142,10 @@ struct StartSessionView: View {
                     .padding(.bottom)
                 
                 VStack(spacing: 15) {
-                    Stepper("**Duration:** \(durationString)", value: $duration, in: 0.5...4, step: 0.5)
+                    Stepper("**Duration:** \(duration.formatted(.duration))", value: $duration, in: (30*60)...(4*60*60), step: 15*60)
                     
                     Toggle("**Allow Pausing**", isOn: $allowPausing)
-                        .disabled(duration < 1)
+                        .disabled(duration < 60*60)
                 }
                 
             }
@@ -148,22 +153,27 @@ struct StartSessionView: View {
         }
         .transition(.move(edge: .bottom).combined(with: .opacity))
         .onChange(of: duration) { oldValue, newValue in
-            if oldValue == 0.5 {
+            if oldValue == (45*60) && newValue != (30*60) {
                 allowPausing = true
             }
             
-            if newValue == 0.5  {
+            if newValue == (45*60)  {
                 allowPausing = false
             }
         }
     }
     
-    func startSession() {
+    private func startSession() {
         model.startSession(
             for: project,
             duration: duration,
             allowPausing: allowPausing,
             in: modelContext
         )
+    }
+    
+    private func resetState() {
+        duration = 30*60
+        allowPausing = false
     }
 }

@@ -73,25 +73,6 @@ extension View {
         )
     }
     
-//    func topBar<Content: View>(
-//        title: String,
-//        behavior: TopBarBehavior = .standard,
-//        @ViewBuilder content: @escaping (_ title: AnyView) -> Content
-//    ) -> some View {
-//        modifier(
-//            TopBarModifier<Content>(behavior: behavior) { isMinimized in
-//                content(
-//                    AnyView(
-//                        Text(title)
-//                            .font(isMinimized ? .title3 : .largeTitle)
-//                            .bold()
-//                            .frame(maxWidth: .infinity, alignment: isMinimized ? .center : .leading)
-//                    )
-//                )
-//            }
-//        )
-//    }
-    
     func topBar<Content: View>(behavior: TopBarBehavior = .standard, @ViewBuilder content: @escaping (_ isMinimized: Bool) -> Content) -> some View {
         modifier(TopBarModifier(behavior: behavior, topBarContent: content))
     }

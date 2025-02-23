@@ -10,14 +10,6 @@ import SwiftUI
 extension ShapeStyle where Self == _ShadowShapeStyle<_ShadowShapeStyle<Material>> {
     static var glass: some ShapeStyle {
         Material.ultraThinMaterial
-//                    .shadow(
-//                        .inner(
-//                            color: .white.opacity(0.4),
-//                            radius: 0.8,
-//                            x: 0.5,
-//                            y: 0.5
-//                        )
-//                    )
             .shadow(
                 .drop(
                     color: .white.opacity(0.25),
@@ -33,7 +25,7 @@ extension ShapeStyle where Self == _ShadowShapeStyle<_ShadowShapeStyle<Material>
         Material.ultraThinMaterial
             .shadow(
                 .drop(
-                    color: .white.opacity(0.4),
+                    color: .white.opacity(0.25),
                     radius: 0.5,
                     x: -0.4,
                     y: -0.5
@@ -68,7 +60,7 @@ extension ShapeStyle where Self == _ShadowShapeStyle<_ShadowShapeStyle<Material>
         Material.thinMaterial
             .shadow(
                 .drop(
-                    color: .white.opacity(0.4),
+                    color: .white.opacity(0.25),
                     radius: 0.5,
                     x: -0.4,
                     y: -0.5

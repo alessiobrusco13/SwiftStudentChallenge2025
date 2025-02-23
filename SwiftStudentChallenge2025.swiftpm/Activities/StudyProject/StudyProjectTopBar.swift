@@ -17,13 +17,11 @@ struct StudyProjectTopBar: View {
         Group {
             HStack(spacing: 5) {
                 if let symbol = project.symbol?.rawValue {
-                    
                     Image(systemName: symbol)
                 }
                 
                 Text(project.title)
             }
-            
             .font(.headline)
             .fontStyling(for: project.appearance)
             .multilineTextAlignment(.center)

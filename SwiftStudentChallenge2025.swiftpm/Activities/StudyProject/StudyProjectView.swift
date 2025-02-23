@@ -33,12 +33,18 @@ struct StudyProjectView: View {
                 allStepSelectionBackground
                 
                 ScrollView {
-                    StepsView(
-                        steps: $project.steps,
-                        selection: $stepSelection,
-                        showingAllSteps: $showingAllSteps,
-                        appearance: project.appearance
-                    )
+                    VStack(spacing: 12) {
+                        if let session = project.currentSession() {
+                            StudySessionView(project: project, session: session)
+                                .allowsHitTesting(stepSelection == nil)
+                        }
+                        
+                        StepsView(
+                            project: project,
+                            selection: $stepSelection,
+                            showingAllSteps: $showingAllSteps
+                        )
+                    }
                 }
             }
             .topBar(behavior: .alwaysMinimized) { _ in

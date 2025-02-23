@@ -19,8 +19,11 @@ import SwiftUI
 //  – [] ricordare di fare pause
 //  – [] resoconto mood nel mentre
 //  – [] invitare a pensare al perché delle cose (perché sto per procrastinare) magari quando si clicca il pulsante per fermarsi
+//  – [] Feelings section, encourage reflection. ~ Sentiment Analysis
 
 // – [] NEGRO Natural language sentiment analysis
+
+// – [] Metti a posto emotion logger,.
 
 // MARK: VEDI magari fai che quando ti locki ti compare una schermata fissa (magari animata) e quando provi a fare pausa ti dice no no no, troppo poco tempo.
 

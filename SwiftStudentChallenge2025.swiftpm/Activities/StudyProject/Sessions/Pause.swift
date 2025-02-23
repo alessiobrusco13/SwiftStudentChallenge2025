@@ -9,12 +9,12 @@ import Foundation
 
 extension StudySession {
     struct Pause: Codable {
-        let startDate: Date
-        let endDate: Date?
+        var startDate = Date.now
+        var endDate: Date?
         
         var duration: TimeInterval? {
             guard let endDate else { return nil }
-            return endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970
+            return endDate.timeIntervalSince(startDate)
         }
     }
 }

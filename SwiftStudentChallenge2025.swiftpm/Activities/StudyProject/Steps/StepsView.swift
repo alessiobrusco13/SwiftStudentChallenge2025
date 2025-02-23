@@ -9,21 +9,29 @@ import SwiftUI
 
 // Add a button to add steps. It adds an empty one, then it selects it and focuses it.
 struct StepsView: View {
-    @Binding var steps: [StudyProject.Step]
+    @Bindable var project: StudyProject
     @Binding var selection: StudyProject.Step?
     @Binding var showingAllSteps: Bool
-    let appearance: StudyProject.Appearance
     
     @Namespace private var namespace
+    @FocusState private var nameFieldSelection: UUID?
     
     private var currentStep: StudyProject.Step? {
-        steps.first { $0.isCompleted == false }
+        project.steps.first { $0.isCompleted == false }
+    }
+    
+    private var paddingEdges: Edge.Set {
+        if project.currentSessionID == nil || ((selection != nil) && !showingAllSteps) {
+            .all
+        } else {
+            .horizontal
+        }
     }
     
     var body: some View {
         GroupBox {
             VStack(spacing: 20) {
-                ForEach($steps) { $step in
+                ForEach($project.steps) { $step in
                     stepView(step, binding: $step)
                 }
             }
@@ -37,17 +45,18 @@ struct StepsView: View {
                 .contentShape(.containerRelative)
                 .onTapGesture(perform: expandAction)
                 
-                Button(action: expandAction, label: expandButtonLabel)
-                    .buttonBorderShape(.circle)
-                    .buttonStyle(.prominentGlass)
-                    .colorScheme(.light)
+                newStepButton
+                expandButton
             }
         }
         .groupBoxStyle(.glass)
         .onTapGesture {
             // To make the background not tappable for dismissal
         }
-        .padding((selection != nil) || showingAllSteps ? 5 : 16)
+        .padding(
+            paddingEdges,
+            (selection != nil) || showingAllSteps ? 5 : 16
+        )
         .onChange(of: currentStep) {
             if currentStep == nil {
                 showingAllSteps = false
@@ -60,14 +69,24 @@ struct StepsView: View {
     @ViewBuilder private func stepView(_ step: StudyProject.Step, binding: Binding<StudyProject.Step>) -> some View {
         // Show all steps only when necessary
         if showingAllSteps || currentStep == nil {
-            StepRowView(step: binding, selection: $selection, deleteButton: deleteButton)
+            StepRowView(
+                step: binding,
+                selection: $selection,
+                nameFieldSelection: $nameFieldSelection,
+                deleteButton: deleteButton
+            )
                 .matchedGeometryEffect(id: step.id, in: namespace)
                 .transition(.opacity.animation(.smooth(duration: 0.2)))
         } else {
             if let currentStep, step == currentStep {
-                StepRowView(step: binding, selection: $selection, deleteButton: deleteButton)
-                    .matchedGeometryEffect(id: step.id, in: namespace)
-                    .transition(.opacity.animation(.smooth(duration: 0.2)))
+                StepRowView(
+                    step: binding,
+                    selection: $selection,
+                    nameFieldSelection: $nameFieldSelection,
+                    deleteButton: deleteButton
+                )
+                .matchedGeometryEffect(id: step.id, in: namespace)
+                .transition(.opacity.animation(.smooth(duration: 0.2)))
             }
         }
     }
@@ -85,19 +104,37 @@ struct StepsView: View {
             }
         }
         .transition(.blurReplace)
-        .fontStyling(for: appearance)
+        .fontStyling(for: project.appearance)
     }
     
-    private func expandButtonLabel() -> some View {
-        Label(
-            showingAllSteps ? "Show only current step" : "Show all steps",
-            systemImage: showingAllSteps
-            ? "arrow.down.right.and.arrow.up.left"
-            : "arrow.up.backward.and.arrow.down.forward"
-        )
-        .labelStyle(.iconOnly)
-        .font(.body)
-        .bold()
+    private var expandButton: some View {
+        Button(action: expandAction) {
+            Label(
+                showingAllSteps ? "Show only current step" : "Show all steps",
+                systemImage: showingAllSteps
+                ? "arrow.down.right.and.arrow.up.left"
+                : "arrow.up.backward.and.arrow.down.forward"
+            )
+            .labelStyle(.iconOnly)
+            .font(.body)
+            .bold()
+        }
+        .buttonBorderShape(.circle)
+        .buttonStyle(.prominentGlass)
+    }
+    
+    private var newStepButton: some View {
+        Button(action: addNewStep) {
+            Label(
+                "Add new step",
+                systemImage: "plus"
+            )
+            .labelStyle(.iconOnly)
+            .font(.body)
+            .bold()
+        }
+        .buttonBorderShape(.circle)
+        .buttonStyle(.prominentGlass)
     }
     
     private func deleteButton(for step: StudyProject.Step) -> some View {
@@ -110,6 +147,24 @@ struct StepsView: View {
         }
         .buttonStyle(.pressable)
         .matchedGeometryEffect(id: "deleteButton", in: namespace)
+    }
+    
+    private func addNewStep() {
+        let newStep = StudyProject.Step(name: "New Step")
+        
+        Task { @MainActor in
+            showingAllSteps = true
+            try? await Task.sleep(for: .seconds(0.3))
+            
+            withAnimation {
+                project.steps.append(newStep)
+            }
+                        
+            selection = newStep
+            
+            #warning("KNOWN ISSUE: Doesn't focus the text field.")
+            nameFieldSelection = newStep.id
+        }
     }
     
     private func expandAction() {
@@ -127,10 +182,10 @@ struct StepsView: View {
     }
     
     private func delete(_ step: StudyProject.Step) {
-        guard let index = steps.firstIndex(of: step) else { return }
+        guard let index = project.steps.firstIndex(of: step) else { return }
         
         withAnimation {
-            _ = steps.remove(at: index)
+            _ = project.steps.remove(at: index)
         }
     }
     
@@ -148,10 +203,9 @@ struct StepsView: View {
         
         ScrollView {
             StepsView(
-                steps: $project.steps,
+                project: project,
                 selection: $selection,
-                showingAllSteps: $showingAllSteps,
-                appearance: project.appearance
+                showingAllSteps: $showingAllSteps
             )
             
             Button("Deselect") {

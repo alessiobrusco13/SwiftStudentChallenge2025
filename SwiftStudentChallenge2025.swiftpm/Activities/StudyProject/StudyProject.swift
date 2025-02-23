@@ -86,4 +86,9 @@ final class StudyProject: Identifiable {
         
         return project
     }()
+    
+    func currentSession() -> StudySession? {
+        guard let currentSessionID else { return nil }
+        return sessions.first { $0.id == currentSessionID }
+    }
 }

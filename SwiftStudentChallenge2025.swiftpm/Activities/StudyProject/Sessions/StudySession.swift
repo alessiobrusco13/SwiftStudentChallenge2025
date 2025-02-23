@@ -8,22 +8,84 @@
 import Foundation
 import SwiftData
 
-@Model class StudySession: Identifiable {
+@Model
+class StudySession: Identifiable {
     @Attribute(.unique) var id: UUID
     
     var startDate: Date
     var duration: TimeInterval
-    var isPaused: Bool
     var pauses: [Pause]?
     
     var project: StudyProject
     
-    init(startDate: Date = .now, duration: TimeInterval, isPaused: Bool = false, pauses: [Pause]?, project: StudyProject) {
+    init(startDate: Date = .now, duration: TimeInterval, pauses: [Pause]?, project: StudyProject) {
         self.id = UUID()
         self.startDate = startDate
         self.duration = duration
-        self.isPaused = isPaused
         self.pauses = pauses
         self.project = project
+    }
+    
+    init(startDate: Date = .now, duration: TimeInterval, allowPausing: Bool, project: StudyProject) {
+        self.id = UUID()
+        self.startDate = startDate
+        self.duration = duration
+        self.project = project
+        
+        pauses = allowPausing ? [] : nil
+    }
+    
+    @MainActor static let example = StudySession(duration: 60*60, allowPausing: true, project: .example)
+    
+    var timeProgress: TimeInterval {
+        let timeFromStart = Date.now.timeIntervalSince(startDate)
+        guard let pauses, !pauses.isEmpty else { return timeFromStart }
+        
+        let pauseDuration = pauses
+            .map(\.duration)
+            .compactMap { $0 }
+            .reduce(0, +)
+        
+        if let pauseIndex = currentPauseIndex() {
+            return pauses[pauseIndex].startDate.timeIntervalSince(startDate) - pauseDuration
+        } else {
+            return timeFromStart - pauseDuration
+        }
+    }
+    
+    var timeRemaining: TimeInterval {
+        duration - timeProgress
+    }
+    
+    var progress: Double {
+        timeProgress / duration
+    }
+    
+    func currentPauseIndex() -> Int? {
+        pauses?.firstIndex { $0.endDate == nil }
+    }
+    
+    var isPaused: Bool {
+        currentPauseIndex() != nil
+    }
+    
+    func pause() {
+        guard pauses !=  nil else { return }
+        
+        let pause = Pause()
+        pauses?.append(pause)
+    }
+    
+    func resume(at date: Date = .now) {
+        guard let index = currentPauseIndex() else { return }
+        pauses?[index].endDate = date
+    }
+    
+    func cancel() {
+        let now = Date.now
+        duration = Date.now.timeIntervalSince1970 - now.timeIntervalSince1970
+        resume(at: now)
+        
+        project.currentSessionID = nil
     }
 }
