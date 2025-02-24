@@ -16,10 +16,7 @@ struct StudyProjectTopBar: View {
     var body: some View {
         Group {
             HStack(spacing: 5) {
-                if let symbol = project.symbol?.rawValue {
-                    Image(systemName: symbol)
-                }
-                
+                Image(systemName: project.symbol.rawValue)
                 Text(project.title)
             }
             .font(.headline)

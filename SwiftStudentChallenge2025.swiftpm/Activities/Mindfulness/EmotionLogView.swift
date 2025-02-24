@@ -9,10 +9,10 @@ import SwiftUI
 
 struct EmotionLogView: View {
     let project: StudyProject
-    let dismiss: () -> Void
     
     @Environment(Model.self) private var model
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         
@@ -37,6 +37,6 @@ struct EmotionLogView: View {
 }
 
 #Preview {
-    EmotionLogView(project: .example) { }
+    EmotionLogView(project: .example)
     .environment(Model.preview)
 }

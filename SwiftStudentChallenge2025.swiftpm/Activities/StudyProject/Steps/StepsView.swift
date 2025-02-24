@@ -162,7 +162,7 @@ struct StepsView: View {
                         
             selection = newStep
             
-            #warning("KNOWN ISSUE: Doesn't focus the text field.")
+            // Doesn't work
             nameFieldSelection = newStep.id
         }
     }

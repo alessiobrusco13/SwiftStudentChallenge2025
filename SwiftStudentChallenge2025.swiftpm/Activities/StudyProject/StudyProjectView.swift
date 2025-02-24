@@ -21,6 +21,8 @@ struct StudyProjectView: View {
     
     @State private var startSessionViewExpanded = false
     
+    @State private var showingCompletedAlert = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -28,13 +30,13 @@ struct StudyProjectView: View {
                     .fill(project.appearance.itemColorRepresentation.color.gradient.opacity(0.4))
                     .ignoresSafeArea()
                 
-                allStepSelectionBackground
+                allStepsSelectionBackground
                 
                 ScrollView {
                     VStack(spacing: 12) {
                         if let session = project.currentSession() {
                             StudySessionView(project: project, session: session)
-                            .allowsHitTesting(stepSelection == nil)
+                                .allowsHitTesting(stepSelection == nil && !showingEmotionLogger)
                         }
                         
                         StepsView(
@@ -78,18 +80,27 @@ struct StudyProjectView: View {
                 }
                 .disabled(stepSelection != nil || showingAllSteps)
             }
-            .presentationBackground {
-                // Not the best implementation
-                AnimatedBackgroundView()
-            }
+            .presentationBackground(content: AnimatedBackgroundView.init)
             .contentShape(.rect)
             .onTapGesture(perform: deselectSteps)
             .glassAlert(
                 "Hold on, how are you feeling right now?",
                 isPresented: $showingEmotionLogger,
-                message: "Select one of the emotions below and try to understand why you're feeling this way."
-            ) { dismiss in
-                EmotionLogView(project: project, dismiss: dismiss)
+                message: "Select one of the emotions below and try to understand why you're feeling this way.",
+                dismissiveBackground: false
+            ) {
+                EmotionLogView(project: project)
+            }
+            .glassAlert(
+                "Well Done!",
+                isPresented: $showingCompletedAlert,
+                message: "You've completed this project, congrats!"
+            ) {
+                Button("Nice") {
+                    showingCompletedAlert = false
+                }
+                .font(.headline)
+                .buttonStyle(.pressable)
             }
             .onDisappear {
                 stepSelection = nil
@@ -100,9 +111,18 @@ struct StudyProjectView: View {
             }
             .interactiveDismissDisabled(startSessionViewExpanded)
         }
+        .onChange(of: project.isCompleted) {
+            showingCompletedAlert = project.isCompleted
+            
+            if project.isCompleted {
+                if let currentSessionID = project.currentSessionID, let session = project.sessions.first(where: { $0.id == currentSessionID }) {
+                    session.cancel()
+                }
+            }
+        }
     }
     
-    var allStepSelectionBackground: some View {
+    var allStepsSelectionBackground: some View {
         // Dims the screen when a step is selected.
         Rectangle()
             .animation(.smooth(duration: 1)) { view in

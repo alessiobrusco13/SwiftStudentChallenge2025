@@ -18,6 +18,10 @@ struct StudyProjectItemView: View {
     }
     
     private var deadlineString: String? {
+        guard !Calendar.current.isDateInToday(project.endDate) else {
+            return "Due Today"
+        }
+        
         guard let daysUntilDeadline = Calendar.current.dateComponents([.day], from: .now, to: project.endDate).day else {
             return nil
         }
@@ -30,8 +34,8 @@ struct StudyProjectItemView: View {
             return nil
         }
         
+        
         switch daysUntilDeadline {
-        case 0: return "Due Today"
         case 1: return "Due Tomorrow"
         default: return "Due in \(daysUntilDeadline) days"
         }
@@ -53,9 +57,7 @@ struct StudyProjectItemView: View {
                 }
             }
             .overlay(alignment: .topLeading) {
-                if let symbol = project.symbol {
-                    icon(for: symbol.rawValue)
-                }
+                icon(for: project.symbol.rawValue)
             }
             .compositingGroup()
     }

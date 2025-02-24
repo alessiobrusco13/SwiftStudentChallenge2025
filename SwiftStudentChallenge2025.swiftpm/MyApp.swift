@@ -1,10 +1,10 @@
 import SwiftUI
 
-// – [] App name
+// – [~] App name
 // – [] App icon
 // – [] Essays
 
-// – [] Fix background view (use a timeline view)
+// – [X] Fix background view (use a timeline view)
 // – [] Project Creation (Ask 'what are you doing this for?' 'Other times this has gone through' etc)
 // – [] iPad optimization (what to show alongside the projects)
 // – [] Onboarding
@@ -17,20 +17,21 @@ import SwiftUI
 //  – [] perché stai studiando questa roba? (motivazionale)
 //  – [X] pulsante per iniziare e smettere di lockarsi
 //  – [] ricordare di fare pause
-//  – [] resoconto mood nel mentre (mindfulness tab)
+//  – [X + ~] resoconto mood nel mentre (mindfulness tab)
 //  – [] invitare a pensare al perché delle cose (perché sto per procrastinare) magari quando si clicca il pulsante per fermarsi
-//  – [] Feelings section, encourage reflection. ~ Sentiment Analysis
+//  – [X + ~] Feelings section, encourage reflection. ~ Sentiment Analysis
 
 // – [] NEGRO Natural language sentiment analysis
 
-// – [] Metti a posto emotion logger,.
+// – [X] Metti a posto emotion logger,.
 
 // MARK: VEDI magari fai che quando ti locki ti compare una schermata fissa (magari animata) e quando provi a fare pausa ti dice no no no, troppo poco tempo.
 
 @main
 struct MyApp: App {
     @State private var model = Model.preview
-    @Environment(\.scenePhase) var scenePhase
+    @Environment(\.scenePhase) private var scenePhase
+    @AppStorage(Model.activeProjectIDKey) private var activeProjectID: String?
     
     var body: some Scene {
         WindowGroup {
@@ -41,6 +42,17 @@ struct MyApp: App {
                 .onChange(of: scenePhase) {
                     if case .background = scenePhase {
                         model.shouldShowWelcomeScreen = true
+                        if activeProjectID != nil {
+                            Task {
+                                await model.notificationManager.scheduleNotification(ofKind: .appQuitDuringSession)
+                            }
+                        }
+                        
+                    }
+                }
+                .task {
+                    Task { @MainActor in
+                        await model.notificationManager.requestAuthorization()
                     }
                 }
         }

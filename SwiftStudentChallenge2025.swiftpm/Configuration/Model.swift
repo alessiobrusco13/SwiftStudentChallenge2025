@@ -13,6 +13,7 @@ import SwiftData
 final class Model {
     let container: ModelContainer
     private let modelContext: ModelContext
+    let notificationManager = NotificationManager()
     
     var shouldShowWelcomeScreen = true
     
@@ -40,14 +41,15 @@ final class Model {
     }
     
     func generateSampleData() throws {
-        let configureProject: (StudyProject) -> Void = {
-            $0.steps = (0..<5).map {
-                StudyProject.Step(name: "Step \($0)", details: "Read chapter \($0+1)")
+        let configureProject: (StudyProject, Bool) -> Void = { project, isCompleted in
+            let steps = (0..<5).map {
+                StudyProject.Step(name: "Step \($0)", details: "Read chapter \($0+1)", isCompleted: isCompleted)
             }
             
-            $0.symbol = StudyProject.Symbol.allCases.randomElement()!
-            $0.appearance.itemColorRepresentation = .random()
-            $0.appearance.titleFont = StudyProject.Appearance.TitleFont.allCases.randomElement()!
+            project.steps = steps
+            project.symbol = StudyProject.Symbol.allCases.randomElement()!
+            project.appearance.itemColorRepresentation = .random()
+            project.appearance.titleFont = StudyProject.Appearance.TitleFont.allCases.randomElement()!
         }
         
         for i in 0..<3 {
@@ -56,7 +58,7 @@ final class Model {
                 endDate: Calendar.current.date(byAdding: .day, value: 4 + i, to: .now) ?? .now
             )
             
-            configureProject(project)
+            configureProject(project, false)
             modelContext.insert(project)
         }
         
@@ -66,8 +68,8 @@ final class Model {
                 endDate: Calendar.current.date(byAdding: .day, value: -10 - i, to: .now) ?? .now
             )
             
-            project.isCompleted = true
-            configureProject(project)
+            
+            configureProject(project, true)
             modelContext.insert(project)
         }
         

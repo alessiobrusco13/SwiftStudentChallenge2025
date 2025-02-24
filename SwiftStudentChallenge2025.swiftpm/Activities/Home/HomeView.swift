@@ -9,13 +9,17 @@ import SwiftData
 import SwiftUI
 
 // – [] Scroll lag when showing welcome message.
-// – [] Show 'current' project.
+// – [X] Show 'current' project.
 
 struct HomeView: View {
     @State private var selection: StudyProject?
+    @State private var creatingProject = false
     @Namespace private var namespace
     
     @Query var projects: [StudyProject]
+    
+    // Active project means that it has a currently running study session in it. When there is an active project the user cannot access any of the other projects
+    @AppStorage(Model.activeProjectIDKey) private var activeProjectID: String?
     
     // Uncompleted projects come first.
     // Sort completed projects by latest endDate and uncompleted projects by earliest endDate.
@@ -31,11 +35,6 @@ struct HomeView: View {
             return !$0.isCompleted
         }
     }
-    
-    
-    // Active project means that it has a currently running study session in it. When there is an active project the user cannot access any of the other projects
-    @AppStorage(Model.activeProjectIDKey) private var activeProjectID: String?
-    
     
     var body: some View {
         NavigationStack {
@@ -87,6 +86,7 @@ struct HomeView: View {
                 .topBar(behavior: activeProjectID == nil ? .standard : .neverMinimized) { isMinimized in
                     HomeTopBar(isMinimized: isMinimized) {
                         Button {
+                            creatingProject = true
                         } label: {
                             Image(systemName: "plus")
                                 .fontWeight(.bold)
@@ -113,6 +113,7 @@ struct HomeView: View {
             StudyProjectView(project: project)
                 .navigationTransition(.zoom(sourceID: project.id, in: namespace))
         }
+        .fullScreenCover(isPresented: $creatingProject, content: CreateProjectView.init)
     }
 }
 

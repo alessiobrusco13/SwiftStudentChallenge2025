@@ -30,13 +30,35 @@ final class StudyProject: Identifiable {
         case desktop = "desktopcomputer"
         case building = "building.columns.fill"
         case globe = "globe"
+        
+        var displayName: String {
+            switch self {
+            case .book: return "Book"
+            case .pencil: return "Pencil"
+            case .bookmark: return "Bookmark"
+            case .divide: return "Division"
+            case .function: return "Function"
+            case .sum: return "Summation"
+            case .medical: return "Medical"
+            case .fluidBag: return "IV Fluid Bag"
+            case .brain: return "Brain"
+            case .chart: return "Chart"
+            case .textCursor: return "Text Cursor"
+            case .scroll: return "Scroll"
+            case .discussion: return "Discussion"
+            case .laptop: return "Laptop"
+            case .arcade: return "Arcade"
+            case .gear: return "Settings"
+            case .desktop: return "Desktop Computer"
+            case .building: return "Institution"
+            case .globe: return "Globe"
+            }
+        }
     }
     
     @Attribute(.unique) var id: UUID
     
     var title: String
-    var details: String
-    var isCompleted: Bool
     var steps: [Step]
     
     @Relationship(deleteRule: .cascade, inverse: \StudySession.project) var sessions: [StudySession]
@@ -46,15 +68,18 @@ final class StudyProject: Identifiable {
 #warning("It's important the user doesn't change the end date lightly. Be sure to prompt the user about it.")
     var endDate: Date
     
-    var symbol: Symbol?
+    var symbol: Symbol
     var appearance: Appearance
+    
+    var isCompleted: Bool {
+        steps.allSatisfy(\.isCompleted)
+    }
     
     @Relationship(deleteRule: .cascade, inverse: \EmotionLog.project) var emotionLogs = [EmotionLog]()
     
     init(
         title: String,
-        details: String = "",
-        isCompleted: Bool = false,
+
         appearance: Appearance = Appearance(),
         symbol: Symbol = .book,
         startDate: Date = .now,
@@ -65,8 +90,6 @@ final class StudyProject: Identifiable {
         sessions = []
         
         self.title = title
-        self.details = details
-        self.isCompleted = isCompleted
         self.appearance = appearance
         self.symbol = symbol
         self.startDate = startDate

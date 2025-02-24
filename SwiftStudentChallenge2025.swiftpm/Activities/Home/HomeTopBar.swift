@@ -24,7 +24,7 @@ struct HomeTopBar<Content: View>: View {
     }
     
     var welcomeText: String {
-        "Hey! I knew you'd show up ⭐"
+        "Welcome Back!"
     }
     
     var body: some View {
@@ -39,7 +39,7 @@ struct HomeTopBar<Content: View>: View {
                 }
                 
                 HStack(alignment: .firstTextBaseline) {
-                    Text("Today")
+                    Text("Lucid")
                         .font((showingWelcome || isMinimized) ? .headline : .largeTitle)
                         .foregroundStyle((showingWelcome && !isMinimized) ?  .secondary : .primary)
                     

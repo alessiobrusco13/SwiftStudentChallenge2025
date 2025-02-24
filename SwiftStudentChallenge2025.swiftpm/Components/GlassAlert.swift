@@ -28,7 +28,6 @@ struct GlassAlert<Actions: View>: View {
             .padding([.top, .horizontal])
             
             Divider()
-                .padding(.horizontal, -23)
             
             actions()
             .padding([.bottom, .horizontal])
@@ -46,31 +45,22 @@ struct GlassAlertViewModifier<Actions: View>: ViewModifier {
     @Binding var isPresented: Bool
     let message: String
     let dismissiveBackground: Bool
-    @ViewBuilder let actions: (_ dismiss: @escaping () -> Void) -> Actions
+    @ViewBuilder let actions: () -> Actions
     
     func body(content: Content) -> some View {
         content
             .animation(.smooth, value: isPresented)
-            .overlay {
-                if isPresented {
-                    GlassAlert(title: title, message: message) {
-                        actions { isPresented = false }
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .transition(
-                        .move(edge: .bottom)
-                        .combined(with: .opacity)
-                    )
-                    .background {
-                        ProgressiveBlur()
-                            .ignoresSafeArea()
-                            .transition(.opacity)
-                            .onTapGesture {
-                                if dismissiveBackground {
-                                    isPresented = false
-                                }
+            .fullScreenCover(isPresented: $isPresented) {
+                GlassAlert(title: title, message: message, actions: actions)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .presentationBackground {
+                    ProgressiveBlur()
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            if dismissiveBackground {
+                                isPresented = false
                             }
-                    }
+                        }
                 }
             }
     }
@@ -82,7 +72,7 @@ extension View {
         isPresented: Binding<Bool>,
         message: String,
         dismissiveBackground: Bool = true,
-        @ViewBuilder actions: @escaping (_ dismiss: @escaping () -> Void)  -> Actions
+        @ViewBuilder actions: @escaping ()  -> Actions
     ) -> some View {
         modifier(
             GlassAlertViewModifier(

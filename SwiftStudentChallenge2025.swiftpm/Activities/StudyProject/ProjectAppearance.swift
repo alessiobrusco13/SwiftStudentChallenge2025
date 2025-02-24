@@ -10,7 +10,7 @@ import SwiftUI
 extension StudyProject {
     struct Appearance: Codable {
         enum TitleFont: Codable, CaseIterable {
-            case regular, rounded, serif, expanded
+            case regular, expanded, rounded, serif
         }
         
         var titleFont = TitleFont.regular
