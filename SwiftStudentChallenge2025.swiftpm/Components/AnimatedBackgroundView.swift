@@ -35,7 +35,7 @@ struct AnimatedBackgroundView: View {
         .ignoresSafeArea()
         .clipShape(.rect(cornerRadius: 20))
         .padding(-5)
-        .blur(radius: 10)
+        .blur(radius: 5)
     }
     
     func sinWave(in range: ClosedRange<Float>, phaseShift: Float, frequency: Float) -> Float {

@@ -65,7 +65,6 @@ final class StudyProject: Identifiable {
     var currentSessionID: StudyProject.ID?
     
     var startDate: Date
-#warning("It's important the user doesn't change the end date lightly. Be sure to prompt the user about it.")
     var endDate: Date
     
     var symbol: Symbol

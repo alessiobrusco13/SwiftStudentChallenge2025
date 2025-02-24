@@ -40,10 +40,55 @@ final class Model {
         self.modelContext = container.mainContext
     }
     
+//    func generateSampleData() throws {
+//        let configureProject: (StudyProject, Bool) -> Void = { project, isCompleted in
+//            let steps = (0..<5).map {
+//                StudyProject.Step(name: "Step \($0)", details: "Read chapter \($0+1)", isCompleted: isCompleted)
+//            }
+//            
+//            project.steps = steps
+//            project.symbol = StudyProject.Symbol.allCases.randomElement()!
+//            project.appearance.itemColorRepresentation = .random()
+//            project.appearance.titleFont = StudyProject.Appearance.TitleFont.allCases.randomElement()!
+//        }
+//        
+//        for i in 0..<3 {
+//            let project = StudyProject(
+//                title: "Test Project \(i)",
+//                endDate: Calendar.current.date(byAdding: .day, value: 4 + i, to: .now) ?? .now
+//            )
+//            
+//            configureProject(project, false)
+//            modelContext.insert(project)
+//        }
+//        
+//        for i in 0..<3 {
+//            let project = StudyProject(
+//                title: "Completed Project \(i)",
+//                endDate: Calendar.current.date(byAdding: .day, value: -10 - i, to: .now) ?? .now
+//            )
+//            
+//            
+//            configureProject(project, true)
+//            modelContext.insert(project)
+//        }
+//        
+//        try modelContext.save()
+//    }
+    
     func generateSampleData() throws {
         let configureProject: (StudyProject, Bool) -> Void = { project, isCompleted in
-            let steps = (0..<5).map {
-                StudyProject.Step(name: "Step \($0)", details: "Read chapter \($0+1)", isCompleted: isCompleted)
+            let stepNames = ["Research", "Drafting", "Revision", "Final Touches", "Submission"]
+            let stepDetails = [
+                "Gather key materials and take notes",
+                "Outline the structure and start writing",
+                "Refine arguments and correct mistakes",
+                "Polish formatting and citations",
+                "Submit the final work"
+            ]
+            
+            let steps = zip(stepNames, stepDetails).enumerated().map { index, pair in
+                StudyProject.Step(name: pair.0, details: pair.1, isCompleted: isCompleted)
             }
             
             project.steps = steps
@@ -51,28 +96,39 @@ final class Model {
             project.appearance.itemColorRepresentation = .random()
             project.appearance.titleFont = StudyProject.Appearance.TitleFont.allCases.randomElement()!
         }
+
+        let activeProjects = [
+            ("History Essay", 5),
+            ("Math Problem Set", 3),
+            ("Biology Lab Report", 7)
+        ]
         
-        for i in 0..<3 {
+        for (title, daysUntilDue) in activeProjects {
             let project = StudyProject(
-                title: "Test Project \(i)",
-                endDate: Calendar.current.date(byAdding: .day, value: 4 + i, to: .now) ?? .now
+                title: title,
+                endDate: Calendar.current.date(byAdding: .day, value: daysUntilDue, to: .now) ?? .now
             )
             
             configureProject(project, false)
             modelContext.insert(project)
         }
+
+        let completedProjects = [
+            ("Physics Homework", -12),
+            ("Literature Analysis", -15),
+            ("Computer Science Project", -9)
+        ]
         
-        for i in 0..<3 {
+        for (title, daysAgoCompleted) in completedProjects {
             let project = StudyProject(
-                title: "Completed Project \(i)",
-                endDate: Calendar.current.date(byAdding: .day, value: -10 - i, to: .now) ?? .now
+                title: title,
+                endDate: Calendar.current.date(byAdding: .day, value: daysAgoCompleted, to: .now) ?? .now
             )
-            
             
             configureProject(project, true)
             modelContext.insert(project)
         }
-        
+
         try modelContext.save()
     }
     

@@ -17,6 +17,7 @@ struct HomeView: View {
     @Namespace private var namespace
     
     @Query var projects: [StudyProject]
+    @State private var showingCitations = false
     
     // Active project means that it has a currently running study session in it. When there is an active project the user cannot access any of the other projects
     @AppStorage(Model.activeProjectIDKey) private var activeProjectID: String?
@@ -96,7 +97,7 @@ struct HomeView: View {
                         .buttonStyle(.prominentGlass)
                         
                         Button {
-                            
+                            showingCitations.toggle()
                         } label: {
                             Image(systemName: "gear")
                                 .fontWeight(.bold)
@@ -114,6 +115,7 @@ struct HomeView: View {
                 .navigationTransition(.zoom(sourceID: project.id, in: namespace))
         }
         .fullScreenCover(isPresented: $creatingProject, content: CreateProjectView.init)
+        .sheet(isPresented: $showingCitations, content: CitationsView.init)
     }
 }
 
