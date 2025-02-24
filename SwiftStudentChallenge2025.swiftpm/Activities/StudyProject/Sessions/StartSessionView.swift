@@ -110,7 +110,7 @@ struct StartSessionView: View {
                 
                 resetState()
                 
-                try? await Task.sleep(for: .seconds(1.5))
+                try? await Task.sleep(for: .seconds(0.6))
                 
                 withAnimation {
                     showingEmotionLogger = true

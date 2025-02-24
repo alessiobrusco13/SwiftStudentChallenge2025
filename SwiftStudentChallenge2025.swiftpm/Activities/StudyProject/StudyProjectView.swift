@@ -44,7 +44,12 @@ struct StudyProjectView: View {
                         )
                         
                         MindfulnessView(project: project)
+                            .allowsHitTesting(stepSelection == nil)
                             .animation(.default, value: showingAllSteps || stepSelection != nil)
+                        
+//                        PastSessionsView(project: project)
+//                            .allowsHitTesting(stepSelection == nil)
+//                            .animation(.default, value: showingAllSteps || stepSelection != nil)
                     }
                 }
             }
@@ -79,7 +84,13 @@ struct StudyProjectView: View {
             }
             .contentShape(.rect)
             .onTapGesture(perform: deselectSteps)
-            .emotionLogger(isPresented: $showingEmotionLogger, project: project)
+            .glassAlert(
+                "Hold on, how are you feeling right now?",
+                isPresented: $showingEmotionLogger,
+                message: "Select one of the emotions below and try to understand why you're feeling this way."
+            ) { dismiss in
+                EmotionLogView(project: project, dismiss: dismiss)
+            }
             .onDisappear {
                 stepSelection = nil
                 showingAllSteps = false

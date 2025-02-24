@@ -8,7 +8,6 @@
 import SwiftUI
 
 // Could make timer expandable. Modify time making it always have 2 digits (e.g. 01 and not 1).
-// It always starts at 58 secs.
 struct StudySessionView: View {
     let project: StudyProject
     let session: StudySession
@@ -24,7 +23,7 @@ struct StudySessionView: View {
         self.project = project
         self.session = session
         
-        let (hours, minutes, seconds) = session.duration.components()
+        let (hours, minutes, seconds) = session.timeRemaining.components()
         
         _hours = State(wrappedValue: hours)
         _minutes = State(wrappedValue: minutes)

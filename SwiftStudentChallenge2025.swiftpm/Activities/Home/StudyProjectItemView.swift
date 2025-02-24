@@ -40,7 +40,7 @@ struct StudyProjectItemView: View {
     
     var body: some View {
         RoundedRectangle(cornerRadius: 40)
-            .fill(itemColor.gradient.opacity(0.6))
+            .fill(itemColor.gradient.opacity(0.65))
             .frame(maxWidth: 370)
             .frame(height: 390)
             .matchedTransitionSource(id: project.id, in: namespace)

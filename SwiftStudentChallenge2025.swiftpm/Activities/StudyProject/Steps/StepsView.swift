@@ -171,11 +171,11 @@ struct StepsView: View {
         Task { @MainActor in
             if showingAllSteps {
                 selection = nil
-                try? await Task.sleep(for: .seconds(0.2))
+                try? await Task.sleep(for: .seconds(0.1))
                 showingAllSteps = false
             } else {
                 showingAllSteps = true
-                try? await Task.sleep(for: .seconds(0.2))
+//                try? await Task.sleep(for: .seconds(0))
                 selection = currentStep
             }
         }
