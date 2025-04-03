@@ -40,42 +40,6 @@ final class Model {
         self.modelContext = container.mainContext
     }
     
-//    func generateSampleData() throws {
-//        let configureProject: (StudyProject, Bool) -> Void = { project, isCompleted in
-//            let steps = (0..<5).map {
-//                StudyProject.Step(name: "Step \($0)", details: "Read chapter \($0+1)", isCompleted: isCompleted)
-//            }
-//            
-//            project.steps = steps
-//            project.symbol = StudyProject.Symbol.allCases.randomElement()!
-//            project.appearance.itemColorRepresentation = .random()
-//            project.appearance.titleFont = StudyProject.Appearance.TitleFont.allCases.randomElement()!
-//        }
-//        
-//        for i in 0..<3 {
-//            let project = StudyProject(
-//                title: "Test Project \(i)",
-//                endDate: Calendar.current.date(byAdding: .day, value: 4 + i, to: .now) ?? .now
-//            )
-//            
-//            configureProject(project, false)
-//            modelContext.insert(project)
-//        }
-//        
-//        for i in 0..<3 {
-//            let project = StudyProject(
-//                title: "Completed Project \(i)",
-//                endDate: Calendar.current.date(byAdding: .day, value: -10 - i, to: .now) ?? .now
-//            )
-//            
-//            
-//            configureProject(project, true)
-//            modelContext.insert(project)
-//        }
-//        
-//        try modelContext.save()
-//    }
-    
     func generateSampleData() throws {
         let configureProject: (StudyProject, Bool) -> Void = { project, isCompleted in
             let stepNames = ["Research", "Drafting", "Revision", "Final Touches", "Submission"]
