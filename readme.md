@@ -80,6 +80,7 @@ While originally developed for the Swift Student Challenge, Lucid is now being r
 ## 📄 Submission Essays
 
 ### 🟣 1. Tell us about your app in one sentence. What specific problem is it trying to solve? *(50 words)*  
+
 Lucid helps students combat procrastination in academic tasks by promoting emotional awareness and easing anxiety through a mindful design.
 
 ---
@@ -98,19 +99,39 @@ I used the SwiftUI framework for the interface and the animations, while also us
 
 ---
 
-### 🟣 3. Beyond the Swift Student Challenge  
+### 🟣 3. Beyond the Swift Student Challenge
+
 If you've used your coding skills to support your community or an organization in your area, let us know. *(200 words)*  
 
+I've always been passionate about creating software that is both useful to me and beneficial to others. Throughout my coding journey, I've worked on projects that address real-world challenges, both in education and accessibility.
+
+At the Apple Developer Academy, I collaborated with fellow students to design an app that helps visually impaired people navigate indoor spaces. To ensure its effectiveness, we engaged with specialized facilities, gathering insights to refine the user experience.
+
+Beyond that, I’ve also developed numerous Swift Playgrounds for coding classes at my school and even had the opportunity to teach in some of them. During the lockdown, I used Swift to build projects that visualized mathematical concepts my class and I were studying—such as rendering Pascal’s triangle in the console. One of my ongoing projects, developed with classmates and my math teacher, is an app that solves systems of linear equations using different algorithms.
+
+In the past, I also participated in a nationwide competition for Italian schools with an app that leverages AI to help students with special educational needs by generating summaries and diagrams, making studying more accessible.
 
 ---
 
-### 🟣 4. Apps on the App Store (optional)  
-If you have one or more apps on the App Store created entirely by you as an individual, tell us about them. *(200 words)*  
+### 🟣 4. Apps on the App Store (optional) 
+
+If you have one or more apps on the App Store created entirely by you as an individual, tell us about them. *(200 words)* 
+
+So far, I’ve published two apps on the App Store: “Trippic!” and “FeelIt: Palette Manager.”
+
+“Trippic!” was the first app I released. It’s a digital diary that allows users to document and preserve their travel experiences over time, capturing snapshots of landscapes, places, and meaningful encounters, along with the thoughts and feelings associated with them. I developed this app using SwiftUI and MapKit, fully localized in Italian and English, with VoiceOver support.
+
+“FeelIt: Palette Manager” is the app I submitted for last year’s Swift Student Challenge. I was fortunate enough to win, which led to the publication of the project. This app is a palette creator that aims to encourage users to approach color selection with greater mindfulness, focusing on the emotions that color can convey.
 
 ---
 
 ### 🟣 5. Comments (optional)  
-> _"Al di fuori del vincere o meno, il fatto stesso di progettare questa applicazione mi ha aiutato a gestire meglio a me in primis la procrastinazione, che mi ha afflitto anche durante lo sviluppo della stessa."_
+
+I've always struggled with procrastination. It's a challenge that has followed me through my studies, turning even simple tasks into overwhelming obstacles. One of my recent exams was a wake-up call—I found myself caught in the cycle of delaying work, rushing at the last minute, and dealing with unnecessary stress.  
+
+That experience made me reflect on why procrastination happens and how to break the cycle. I realized that the solution wasn’t just about time management but about understanding the emotions behind procrastination—why some tasks feel so daunting and why avoidance seems like the easier choice.  
+
+This is what led me to create this app. I started by addressing a problem that affects me firsthand, but in the process, I discovered a broader approach to managing procrastination. The app isn’t just about getting things done—it’s about understanding why we avoid tasks in the first place and creating an environment where progress feels natural rather than forced.
 
 ---
 
