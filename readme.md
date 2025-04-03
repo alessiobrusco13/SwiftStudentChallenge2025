@@ -16,8 +16,6 @@ Inspired by real psychological research, Lucid turns the fight against procrasti
 
 ## 💡 Why Lucid?
 
-## 💡 Why Lucid?
-
 Lucid wasn’t just built to solve a problem — it came from something personal.
 
 Like many students, I’ve struggled with procrastination. That familiar cycle of anxiety, avoidance, and last-minute rushes has followed me for years. Ironically, I even finished building Lucid during an all-nighter. But that only made the project feel more real — I was building something I genuinely needed.
