@@ -99,9 +99,7 @@ I used the SwiftUI framework for the interface and the animations, while also us
 
 ---
 
-### 🟣 3. Beyond the Swift Student Challenge
-
-If you've used your coding skills to support your community or an organization in your area, let us know. *(200 words)*  
+### 🟣 3. Beyond the Swift Student Challenge *(200 words)*
 
 I've always been passionate about creating software that is both useful to me and beneficial to others. Throughout my coding journey, I've worked on projects that address real-world challenges, both in education and accessibility.
 
@@ -113,9 +111,7 @@ In the past, I also participated in a nationwide competition for Italian schools
 
 ---
 
-### 🟣 4. Apps on the App Store (optional) 
-
-If you have one or more apps on the App Store created entirely by you as an individual, tell us about them. *(200 words)* 
+### 🟣 4. Apps on the App Store *(200 words) (optional)*
 
 So far, I’ve published two apps on the App Store: “Trippic!” and “FeelIt: Palette Manager.”
 
@@ -125,7 +121,7 @@ So far, I’ve published two apps on the App Store: “Trippic!” and “FeelIt
 
 ---
 
-### 🟣 5. Comments (optional)  
+### 🟣 5. Comments *(optional)*
 
 I've always struggled with procrastination. It's a challenge that has followed me through my studies, turning even simple tasks into overwhelming obstacles. One of my recent exams was a wake-up call—I found myself caught in the cycle of delaying work, rushing at the last minute, and dealing with unnecessary stress.  
 
