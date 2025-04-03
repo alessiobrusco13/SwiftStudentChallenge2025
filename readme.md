@@ -16,19 +16,21 @@ Inspired by real psychological research, Lucid turns the fight against procrasti
 
 ## 💡 Why Lucid?
 
-Lucid wasn’t just built to solve a problem — it was built out of personal experience.
+## 💡 Why Lucid?
 
-Like many students, I’ve struggled with procrastination. That familiar cycle of anxiety, avoidance, and last-minute rushes has followed me for years. Ironically, I finished building Lucid during an all-nighter — but that only made the project more real. I was building something I genuinely needed.
+Lucid wasn’t just built to solve a problem — it came from something personal.
 
-Studies show that procrastination often stems from poor emotional regulation. When faced with a task that feels overwhelming, we tend to avoid it in search of short-term relief. But that relief only feeds the cycle.
+Like many students, I’ve struggled with procrastination. That familiar cycle of anxiety, avoidance, and last-minute rushes has followed me for years. Ironically, I even finished building Lucid during an all-nighter. But that only made the project feel more real — I was building something I genuinely needed.
 
-Lucid was designed to help break that cycle — to:
+To better understand *why* procrastination happens, I also dove into research on emotional regulation, anxiety, and motivation. I wanted to ground Lucid in something deeper than just productivity hacks — to design around the actual psychological causes. Some of the most relevant studies I referenced are included in the [`/Research`](./Research) folder.
+
+Lucid was created to help break that cycle — to:
 
 - Reduce anxiety tied to academic pressure  
 - Help students understand and manage their emotions  
 - Turn study time into a reflective, structured, and more rewarding experience  
 
-Designing Lucid helped me confront my own procrastination. That alone made this project worth building.
+> _“Designing Lucid helped me confront my own procrastination. That alone made this project worth building.”_
 
 ---
 
