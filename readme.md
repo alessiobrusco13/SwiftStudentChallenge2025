@@ -26,13 +26,13 @@ Lucid was created to help break that cycle — to:
 
 - Reduce anxiety tied to academic pressure  
 - Help students understand and manage their emotions  
-- Turn study time into a reflective, structured, and more rewarding experience  
-
-> _“Designing Lucid helped me confront my own procrastination. That alone made this project worth building.”_
+- Turn study time into a reflective, structured, and more rewarding experience
 
 ---
 
 ## 🧩 Core Features
+
+> 🧪 Lucid is still a work in progress. Some features are partially implemented or being refined, and others are planned for future updates.
 
 | Feature | Status |
 |--------|--------|
@@ -133,13 +133,16 @@ This is what led me to create this app. I started by addressing a problem that a
 
 ## 📱 Beyond the Playground
 
-While originally developed for the Swift Student Challenge, Lucid is now being refined for a potential full release. You can explore other apps I’ve built on the [App Store](#) or follow the project for updates.
+While originally developed for the Swift Student Challenge, Lucid is now being refined for a potential full release. You can check updates on my [X/Twitter](https://twitter.com/alessiobrusco13) profile.
+
+You can explore other apps I’ve published on the App Store: [FeelIt: Palette Manager](https://apps.apple.com/it/app/feelit-palette-manager/id6478206043?l=en-GB), that won the Swift Student Challenge in 2023; and [Trippic](https://apps.apple.com/it/app/trippic/id1635511527?l=en-GB), my first ever app.
 
 ---
 
-## 🤍 A Note
+## 🎈 Final Note
 
-Lucid wasn't just built to win — it was built to heal.
-It started as a personal tool to overcome a very real challenge, and I hope it can do the same for others.
+Lucid started as a way to deal with something I’ve always struggled with — and building it helped me understand that challenge a bit better.
 
+If it can do the same for someone else, that’s more than enough.
 
+Made with ❤️ by Alessio
