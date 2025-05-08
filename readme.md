@@ -4,6 +4,8 @@
 
 Lucid helps students tackle academic procrastination by promoting emotional awareness and reducing anxiety—through mindful interaction, persuasive design, and a focused user experience.
 
+*For screenshots and videos of the app please visit [this thread](https://x.com/AlessioBrusco13/status/1908098724510810229).*
+
 ---
 
 ## ✨ What is Lucid?
